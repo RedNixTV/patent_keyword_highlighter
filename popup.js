@@ -29,7 +29,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         "group3",
         "color1",
         "color2",
-        "color3"
+        "color3",
+        "label1",
+        "label2",
+        "label3"
     ]);
 
     document.getElementById("group1").value =
@@ -40,6 +43,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("group3").value =
         saved.group3 || "";
+        
+    document.getElementById("label1").value =
+		saved.label1 || "Base Device";
+
+	document.getElementById("label2").value =
+		saved.label2 || "Function / Business Logic";
+	
+	document.getElementById("label3").value =
+		saved.label3 || "Technical";
 
     document.getElementById("color1").value =
         saved.color1 || "#ff0000";
@@ -66,6 +78,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const group3 =
                 document.getElementById("group3").value;
+                
+            const label1 =
+				document.getElementById("label1").value;
+			
+			const label2 =
+				document.getElementById("label2").value;
+			
+			const label3 =
+				document.getElementById("label3").value;
 
             const color1 =
                 document.getElementById("color1").value;
@@ -82,6 +103,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 group1,
                 group2,
                 group3,
+                label1,
+                label2,
+                label3,
                 color1,
                 color2,
                 color3
