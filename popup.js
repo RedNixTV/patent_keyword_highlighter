@@ -143,6 +143,34 @@ document.addEventListener("DOMContentLoaded", async () => {
 								data-color="#d9b3ff"
 								style="background:#d9b3ff;">
 							</button>
+							
+							<button
+								class="preset-btn"
+								${group.color === "#00cccc" ? "active-preset" : ""}
+								data-color="#00cccc"
+								style="background:#00cccc;">
+							</button>
+							
+							<button
+								class="preset-btn"
+								${group.color === "#ff66cc" ? "active-preset" : ""}
+								data-color="#ff66cc"
+								style="background:#ff66cc;">
+							</button>
+							
+							<button
+								class="preset-btn"
+								${group.color === "#99e6ff" ? "active-preset" : ""}
+								data-color="#99e6ff"
+								style="background:#99e6ff;">
+							</button>
+							
+							<button
+								class="preset-btn"
+								${group.color === "#ffcc99" ? "active-preset" : ""}
+								data-color="#ffcc99"
+								style="background:#ffcc99;">
+							</button>
 						
 							<input
 								type="color"
