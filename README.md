@@ -7,6 +7,9 @@ patent-highlighter/
 ├── styles.css (visual styling only)
 
 dynamic groups
+persistent state
+drag reorder
 collapse/expand
 enable/disable
-drag reorder
+preset palette
+custom colors

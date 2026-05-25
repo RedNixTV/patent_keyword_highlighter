@@ -99,15 +99,51 @@ document.addEventListener("DOMContentLoaded", async () => {
 						<textarea class="group-keywords">${group.keywords.join(", ")}</textarea>
 				
 						<div class="color-row">
-				
+
 							<label>Color:</label>
-				
+						
+							<button
+								class="preset-btn"
+								data-color="#ff0000"
+								style="background:#ff0000;">
+							</button>
+						
+							<button
+								class="preset-btn"
+								data-color="#ff8800"
+								style="background:#ff8800;">
+							</button>
+						
+							<button
+								class="preset-btn"
+								data-color="#dddddd"
+								style="background:#dddddd;">
+							</button>
+						
+							<button
+								class="preset-btn"
+								data-color="#00aa00"
+								style="background:#00aa00;">
+							</button>
+						
+							<button
+								class="preset-btn"
+								data-color="#0088ff"
+								style="background:#0088ff;">
+							</button>
+						
+							<button
+								class="preset-btn"
+								data-color="#d9b3ff"
+								style="background:#d9b3ff;">
+							</button>
+						
 							<input
 								type="color"
 								class="group-color"
 								value="${group.color}"
 							>
-				
+						
 						</div>
 				
 						<button class="delete-group-btn">
@@ -203,6 +239,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                         e.target.value;
                     saveGroups();
                 });
+                
+            wrapper.querySelectorAll(".preset-btn")
+				.forEach(button => {
+			
+					button.addEventListener("click", () => {
+			
+						const color =
+							button.dataset.color;
+			
+						group.color =
+							color;
+			
+						wrapper.querySelector(".group-color").value =
+							color;
+			
+						saveGroups();
+					});
+				});
 
             // -----------------------------
             // DELETE GROUP
