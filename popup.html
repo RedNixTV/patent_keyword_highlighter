@@ -52,81 +52,21 @@
 
 <body>
 
-    <input type="text" id="label1" class="group-label" value="Base Device">
+    <h2>Patent Highlighter</h2>
 
-    <textarea id="group1"></textarea>
+    <div id="groupsContainer"></div>
 
-    <div class="color-row">
+    <button id="addGroupBtn">
+        + Add Group
+    </button>
 
-        <label>Color:</label>
+    <button id="highlightBtn">
+        Highlight
+    </button>
 
-        <button class="preset-btn" data-target="color1" data-color="#ff0000" style="background:#ff0000;"></button>
-
-        <button class="preset-btn" data-target="color1" data-color="#ff8800" style="background:#ff8800;"></button>
-
-        <button class="preset-btn" data-target="color1" data-color="#dddddd" style="background:#dddddd;"></button>
-
-        <button class="preset-btn" data-target="color1" data-color="#00aa00" style="background:#00aa00;"></button>
-
-        <button class="preset-btn" data-target="color1" data-color="#0088ff" style="background:#0088ff;"></button>
-
-        <button class="preset-btn" data-target="color1" data-color="#d9b3ff" style="background:#d9b3ff;"></button>
-
-        <input type="color" id="color1" value="#ff0000">
-
-    </div>
-
-    <input type="text" id="label2" class="group-label" value="Function / Business Logic">
-
-    <textarea id="group2"></textarea>
-
-    <div class="color-row">
-
-        <label>Color:</label>
-
-        <button class="preset-btn" data-target="color2" data-color="#ff0000" style="background:#ff0000;"></button>
-
-        <button class="preset-btn" data-target="color2" data-color="#ff8800" style="background:#ff8800;"></button>
-
-        <button class="preset-btn" data-target="color2" data-color="#dddddd" style="background:#dddddd;"></button>
-
-        <button class="preset-btn" data-target="color2" data-color="#00aa00" style="background:#00aa00;"></button>
-
-        <button class="preset-btn" data-target="color2" data-color="#0088ff" style="background:#0088ff;"></button>
-
-        <button class="preset-btn" data-target="color2" data-color="#d9b3ff" style="background:#d9b3ff;"></button>
-
-        <input type="color" id="color2" value="#00aa00">
-
-    </div>
-
-    <input type="text" id="label3" class="group-label" value="Technical">
-
-    <textarea id="group3"></textarea>
-
-    <div class="color-row">
-
-        <label>Color:</label>
-
-        <button class="preset-btn" data-target="color3" data-color="#ff0000" style="background:#ff0000;"></button>
-
-        <button class="preset-btn" data-target="color3" data-color="#ff8800" style="background:#ff8800;"></button>
-
-        <button class="preset-btn" data-target="color3" data-color="#dddddd" style="background:#dddddd;"></button>
-
-        <button class="preset-btn" data-target="color3" data-color="#00aa00" style="background:#00aa00;"></button>
-
-        <button class="preset-btn" data-target="color3" data-color="#0088ff" style="background:#0088ff;"></button>
-
-        <button class="preset-btn" data-target="color3" data-color="#d9b3ff" style="background:#d9b3ff;"></button>
-
-        <input type="color" id="color3" value="#d9b3ff">
-
-    </div>
-
-    <button id="highlightBtn">Highlight</button>
-
-    <button id="clearBtn">Clear</button>
+    <button id="clearBtn">
+        Clear
+    </button>
 
     <script src="popup.js"></script>
 

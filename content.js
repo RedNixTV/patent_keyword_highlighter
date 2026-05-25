@@ -124,27 +124,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     if (request.action === "highlight") {
 
-        clearHighlights();
-
-        highlightGroup(
-            request.keywords.group1,
-            request.colors.group1
-        );
-
-        highlightGroup(
-            request.keywords.group2,
-            request.colors.group2
-        );
-
-        highlightGroup(
-            request.keywords.group3,
-            request.colors.group3
-        );
-
-        sendResponse({
-            success: true
-        });
-    }
+		clearHighlights();
+	
+		request.groups.forEach(group => {
+	
+			highlightGroup(
+				group.keywords,
+				group.color
+			);
+		});
+	
+		sendResponse({
+			success: true
+		});
+	}
 
     return true;
 });

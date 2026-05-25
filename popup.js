@@ -1,171 +1,199 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+    const groupsContainer =
+        document.getElementById("groupsContainer");
+
+    const DEFAULT_GROUPS = [
+
+        {
+            id: crypto.randomUUID(),
+            label: "Base Device",
+            color: "#ff0000",
+            keywords: []
+        },
+
+        {
+            id: crypto.randomUUID(),
+            label: "Function / Business Logic",
+            color: "#00aa00",
+            keywords: []
+        },
+
+        {
+            id: crypto.randomUUID(),
+            label: "Technical",
+            color: "#d9b3ff",
+            keywords: []
+        }
+    ];
+
     // -----------------------------------
-    // PRESET COLOR BUTTONS
+    // LOAD GROUPS
     // -----------------------------------
 
-    document.querySelectorAll(".preset-btn").forEach(button => {
+    const saved =
+        await chrome.storage.local.get("groups");
 
-        button.addEventListener("click", () => {
+    let groups =
+        saved.groups || DEFAULT_GROUPS;
 
-            const target =
-                button.dataset.target;
+    // -----------------------------------
+    // RENDER GROUPS
+    // -----------------------------------
 
-            const color =
-                button.dataset.color;
+    function renderGroups() {
 
-            document.getElementById(target).value =
-                color;
+        groupsContainer.innerHTML = "";
+
+        groups.forEach(group => {
+
+            const wrapper =
+                document.createElement("div");
+
+            wrapper.className =
+                "group-block";
+
+            wrapper.innerHTML = `
+
+                <input
+                    type="text"
+                    class="group-label"
+                    value="${group.label}"
+                >
+
+                <textarea class="group-keywords">${group.keywords.join(", ")}</textarea>
+
+                <div class="color-row">
+
+                    <label>Color:</label>
+
+                    <input
+                        type="color"
+                        class="group-color"
+                        value="${group.color}"
+                    >
+
+                </div>
+
+                <button class="delete-group-btn">
+                    Delete Group
+                </button>
+            `;
+
+            // -----------------------------
+            // LABEL
+            // -----------------------------
+
+            wrapper.querySelector(".group-label")
+                .addEventListener("input", (e) => {
+
+                    group.label =
+                        e.target.value;
+                });
+
+            // -----------------------------
+            // KEYWORDS
+            // -----------------------------
+
+            wrapper.querySelector(".group-keywords")
+                .addEventListener("input", (e) => {
+
+                    group.keywords =
+                        e.target.value
+                            .split(",")
+                            .map(k => k.trim())
+                            .filter(Boolean);
+                });
+
+            // -----------------------------
+            // COLOR
+            // -----------------------------
+
+            wrapper.querySelector(".group-color")
+                .addEventListener("input", (e) => {
+
+                    group.color =
+                        e.target.value;
+                });
+
+            // -----------------------------
+            // DELETE GROUP
+            // -----------------------------
+
+            wrapper.querySelector(".delete-group-btn")
+                .addEventListener("click", () => {
+
+                    groups =
+                        groups.filter(g => g.id !== group.id);
+
+                    renderGroups();
+                });
+
+            groupsContainer.appendChild(wrapper);
         });
-    });
+    }
+
+    renderGroups();
 
     // -----------------------------------
-    // LOAD SAVED SETTINGS
+    // ADD GROUP
     // -----------------------------------
 
-    const saved = await chrome.storage.local.get([
-        "group1",
-        "group2",
-        "group3",
-        "color1",
-        "color2",
-        "color3",
-        "label1",
-        "label2",
-        "label3"
-    ]);
+    document.getElementById("addGroupBtn")
+        .addEventListener("click", () => {
 
-    document.getElementById("group1").value =
-        saved.group1 || "";
+            groups.push({
 
-    document.getElementById("group2").value =
-        saved.group2 || "";
+                id: crypto.randomUUID(),
 
-    document.getElementById("group3").value =
-        saved.group3 || "";
-        
-    document.getElementById("label1").value =
-		saved.label1 || "Base Device";
+                label: "New Group",
 
-	document.getElementById("label2").value =
-		saved.label2 || "Function / Business Logic";
-	
-	document.getElementById("label3").value =
-		saved.label3 || "Technical";
+                color: "#ffff00",
 
-    document.getElementById("color1").value =
-        saved.color1 || "#ff0000";
+                keywords: []
+            });
 
-    document.getElementById("color2").value =
-        saved.color2 || "#00aa00";
-
-    document.getElementById("color3").value =
-        saved.color3 || "#8000ff";
+            renderGroups();
+        });
 
     // -----------------------------------
-    // HIGHLIGHT BUTTON
+    // HIGHLIGHT
     // -----------------------------------
 
-    document.getElementById("highlightBtn").addEventListener("click", async () => {
-
-        try {
-
-            const group1 =
-                document.getElementById("group1").value;
-
-            const group2 =
-                document.getElementById("group2").value;
-
-            const group3 =
-                document.getElementById("group3").value;
-                
-            const label1 =
-				document.getElementById("label1").value;
-			
-			const label2 =
-				document.getElementById("label2").value;
-			
-			const label3 =
-				document.getElementById("label3").value;
-
-            const color1 =
-                document.getElementById("color1").value;
-
-            const color2 =
-                document.getElementById("color2").value;
-
-            const color3 =
-                document.getElementById("color3").value;
-
-            // SAVE SETTINGS
+    document.getElementById("highlightBtn")
+        .addEventListener("click", async () => {
 
             await chrome.storage.local.set({
-                group1,
-                group2,
-                group3,
-                label1,
-                label2,
-                label3,
-                color1,
-                color2,
-                color3
+                groups
             });
 
-            const [tab] = await chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            });
+            const [tab] =
+                await chrome.tabs.query({
+                    active: true,
+                    currentWindow: true
+                });
 
             chrome.tabs.sendMessage(
                 tab.id,
                 {
                     action: "highlight",
-
-                    keywords: {
-                        group1: group1.split(",").map(k => k.trim()).filter(Boolean),
-                        group2: group2.split(",").map(k => k.trim()).filter(Boolean),
-                        group3: group3.split(",").map(k => k.trim()).filter(Boolean)
-                    },
-
-                    colors: {
-                        group1: color1,
-                        group2: color2,
-                        group3: color3
-                    }
-                },
-                () => {
-
-                    if (chrome.runtime.lastError) {
-
-                        console.error(
-                            chrome.runtime.lastError.message
-                        );
-
-                        return;
-                    }
-
-                    window.close();
+                    groups
                 }
             );
-
-        } catch (error) {
-
-            console.error(error);
-        }
-    });
+        });
 
     // -----------------------------------
-    // CLEAR BUTTON
+    // CLEAR
     // -----------------------------------
 
-    document.getElementById("clearBtn").addEventListener("click", async () => {
+    document.getElementById("clearBtn")
+        .addEventListener("click", async () => {
 
-        try {
-
-            const [tab] = await chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            });
+            const [tab] =
+                await chrome.tabs.query({
+                    active: true,
+                    currentWindow: true
+                });
 
             chrome.tabs.sendMessage(
                 tab.id,
@@ -173,10 +201,5 @@ document.addEventListener("DOMContentLoaded", async () => {
                     action: "clear"
                 }
             );
-
-        } catch (error) {
-
-            console.error(error);
-        }
-    });
+        });
 });
