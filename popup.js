@@ -122,7 +122,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             wrapper.querySelector(".delete-group-btn")
                 .addEventListener("click", () => {
+                	if (groups.length === 1) {
 
+						alert("At least one group is required.");
+			
+						return;
+					}
                     groups =
                         groups.filter(g => g.id !== group.id);
 
