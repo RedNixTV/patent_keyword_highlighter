@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             label: "Base Device",
             color: "#ff0000",
             keywords: [],
-            collapsed: false
+            collapsed: false,
+            enabled: true
         },
 
         {
@@ -18,7 +19,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             label: "Function / Business Logic",
             color: "#00aa00",
             keywords: [],
-            collapsed: false
+            collapsed: false,
+            enabled: true
         },
 
         {
@@ -26,7 +28,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             label: "Technical",
             color: "#d9b3ff",
             keywords: [],
-            collapsed: false
+            collapsed: false,
+            enabled: true
         }
     ];
 
@@ -37,8 +40,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const saved =
         await chrome.storage.local.get("groups");
 
-    let groups =
-        saved.groups || DEFAULT_GROUPS;
+    let groups = (saved.groups || DEFAULT_GROUPS).map(group => ({
+
+		enabled: true,
+		collapsed: false,
+	
+		...group
+	}));
 
     // -----------------------------------
     // RENDER GROUPS
@@ -63,6 +71,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 						<button class="collapse-btn">
 							${group.collapsed ? "▶" : "▼"}
 						</button>
+						
+						<input
+							type="checkbox"
+							class="group-enabled"
+							${group.enabled ? "checked" : ""}
+						>
 				
 						<input
 							type="text"
@@ -103,6 +117,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 								!group.collapsed;
 					
 							renderGroups();
+						});
+				wrapper.querySelector(".group-enabled")
+						.addEventListener("change", (e) => {
+					
+							group.enabled =
+								e.target.checked;
 						});
             // -----------------------------
             // LABEL
@@ -174,12 +194,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             groups.push({
 
                 id: crypto.randomUUID(),
-
                 label: "New Group",
-
                 color: "#ffff00",
-
-                keywords: []
+                keywords: [],
+                collapsed: false,
+                enabled: true
             });
 
             renderGroups();
@@ -206,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 tab.id,
                 {
                     action: "highlight",
-                    groups
+                    groups: groups.filter(group => group.enabled)
                 }
             );
         });
