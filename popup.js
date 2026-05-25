@@ -51,7 +51,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     // -----------------------------------
     // RENDER GROUPS
     // -----------------------------------
-
+	let draggedGroupId = null;
+	async function saveGroups() {
+		await chrome.storage.local.set({
+			groups
+		});
+	}
+	
     function renderGroups() {
 
         groupsContainer.innerHTML = "";
@@ -63,6 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             wrapper.className =
                 "group-block";
+            wrapper.draggable = true;
 
             wrapper.innerHTML = `
 
@@ -117,13 +124,47 @@ document.addEventListener("DOMContentLoaded", async () => {
 								!group.collapsed;
 					
 							renderGroups();
+							saveGroups();
 						});
 				wrapper.querySelector(".group-enabled")
 						.addEventListener("change", (e) => {
 					
 							group.enabled =
 								e.target.checked;
+							saveGroups();
 						});
+				wrapper.addEventListener("dragstart", () => {
+					draggedGroupId =
+						group.id;
+				
+					wrapper.classList.add("dragging");
+				});
+				wrapper.addEventListener("dragend", () => {
+					wrapper.classList.remove("dragging");
+				});
+				wrapper.addEventListener("dragover", (e) => {
+					e.preventDefault();
+				});
+				wrapper.addEventListener("drop", () => {
+				
+					if (draggedGroupId === group.id) {
+						return;
+					}
+				
+					const draggedIndex =
+						groups.findIndex(g => g.id === draggedGroupId);
+				
+					const targetIndex =
+						groups.findIndex(g => g.id === group.id);
+				
+					const [draggedGroup] =
+						groups.splice(draggedIndex, 1);
+				
+					groups.splice(targetIndex, 0, draggedGroup);
+				
+					renderGroups();
+					saveGroups();
+				});
             // -----------------------------
             // LABEL
             // -----------------------------
@@ -133,6 +174,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     group.label =
                         e.target.value;
+                    saveGroups();
                 });
 
             // -----------------------------
@@ -147,6 +189,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             .split(",")
                             .map(k => k.trim())
                             .filter(Boolean);
+                    saveGroups();
                 });
 
             // -----------------------------
@@ -158,6 +201,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     group.color =
                         e.target.value;
+                    saveGroups();
                 });
 
             // -----------------------------
@@ -176,6 +220,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         groups.filter(g => g.id !== group.id);
 
                     renderGroups();
+                    saveGroups();
                 });
 
             groupsContainer.appendChild(wrapper);
@@ -202,6 +247,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             renderGroups();
+            saveGroups();
         });
 
     // -----------------------------------

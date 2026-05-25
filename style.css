@@ -119,3 +119,7 @@ button {
     width: 28px;
     padding: 0;
 }
+
+.group-block.dragging {
+    opacity: 0.5;
+}
