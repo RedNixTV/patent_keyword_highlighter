@@ -1,3 +1,5 @@
+<img width="378" height="584" alt="Screenshot 2026-05-25 at 6 44 55 PM" src="https://github.com/user-attachments/assets/2a3d668a-2117-4b1b-9b95-df5996221827" />
+
 patent-highlighter/
 │
 ├── manifest.json
@@ -5,6 +7,8 @@ patent-highlighter/
 ├── popup.js        # UI behavior, state, rendering
 ├── content.js      # DOM highlighting engine
 ├── styles.css      # visual styling only
+├── README.md    
+├── CHANGELOG.md      
 
 Architecture Philosophy
 
