@@ -1,18 +1,42 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>Patent Highlighter</title>
+
     <style>
+
         body {
-            width: 320px;
+            width: 340px;
             font-family: Arial;
             padding: 10px;
+        }
+
+        h2 {
+            margin-bottom: 8px;
         }
 
         textarea {
             width: 100%;
             height: 70px;
             margin-bottom: 10px;
+            resize: vertical;
+        }
+
+        .color-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .preset-btn {
+            width: 22px;
+            height: 22px;
+            border: 1px solid #555;
+            cursor: pointer;
+            padding: 0;
         }
 
         button {
@@ -21,32 +45,84 @@
             margin-top: 5px;
             cursor: pointer;
         }
+
     </style>
+
 </head>
+
 <body>
 
     <h2>Group 1</h2>
 
     <textarea id="group1"></textarea>
 
-    <label>Color:</label>
-    <input type="color" id="color1" value="#ff0000">
+    <div class="color-row">
+
+        <label>Color:</label>
+
+        <button class="preset-btn" data-target="color1" data-color="#ff0000" style="background:#ff0000;"></button>
+
+        <button class="preset-btn" data-target="color1" data-color="#ff8800" style="background:#ff8800;"></button>
+
+        <button class="preset-btn" data-target="color1" data-color="#dddddd" style="background:#dddddd;"></button>
+
+        <button class="preset-btn" data-target="color1" data-color="#00aa00" style="background:#00aa00;"></button>
+
+        <button class="preset-btn" data-target="color1" data-color="#0088ff" style="background:#0088ff;"></button>
+
+        <button class="preset-btn" data-target="color1" data-color="#d9b3ff" style="background:#d9b3ff;"></button>
+
+        <input type="color" id="color1" value="#ff0000">
+
+    </div>
 
     <h2>Group 2</h2>
 
     <textarea id="group2"></textarea>
 
-    <label>Color:</label>
-    <input type="color" id="color2" value="#00aa00">
+    <div class="color-row">
+
+        <label>Color:</label>
+
+        <button class="preset-btn" data-target="color2" data-color="#ff0000" style="background:#ff0000;"></button>
+
+        <button class="preset-btn" data-target="color2" data-color="#ff8800" style="background:#ff8800;"></button>
+
+        <button class="preset-btn" data-target="color2" data-color="#dddddd" style="background:#dddddd;"></button>
+
+        <button class="preset-btn" data-target="color2" data-color="#00aa00" style="background:#00aa00;"></button>
+
+        <button class="preset-btn" data-target="color2" data-color="#0088ff" style="background:#0088ff;"></button>
+
+        <button class="preset-btn" data-target="color2" data-color="#d9b3ff" style="background:#d9b3ff;"></button>
+
+        <input type="color" id="color2" value="#00aa00">
+
+    </div>
 
     <h2>Group 3</h2>
 
     <textarea id="group3"></textarea>
 
-    <label>Color:</label>
-    <input type="color" id="color3" value="#8000ff">
+    <div class="color-row">
 
-    <br><br>
+        <label>Color:</label>
+
+        <button class="preset-btn" data-target="color3" data-color="#ff0000" style="background:#ff0000;"></button>
+
+        <button class="preset-btn" data-target="color3" data-color="#ff8800" style="background:#ff8800;"></button>
+
+        <button class="preset-btn" data-target="color3" data-color="#dddddd" style="background:#dddddd;"></button>
+
+        <button class="preset-btn" data-target="color3" data-color="#00aa00" style="background:#00aa00;"></button>
+
+        <button class="preset-btn" data-target="color3" data-color="#0088ff" style="background:#0088ff;"></button>
+
+        <button class="preset-btn" data-target="color3" data-color="#d9b3ff" style="background:#d9b3ff;"></button>
+
+        <input type="color" id="color3" value="#d9b3ff">
+
+    </div>
 
     <button id="highlightBtn">Highlight</button>
 
@@ -55,4 +131,5 @@
     <script src="popup.js"></script>
 
 </body>
+
 </html>
