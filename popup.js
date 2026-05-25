@@ -3,7 +3,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const saved = await chrome.storage.local.get([
         "group1",
         "group2",
-        "group3"
+        "group3",
+        "color1",
+        "color2",
+        "color3"
     ]);
 
     document.getElementById("group1").value =
@@ -14,6 +17,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("group3").value =
         saved.group3 || "";
+
+    document.getElementById("color1").value =
+        saved.color1 || "#ff0000";
+
+    document.getElementById("color2").value =
+        saved.color2 || "#00aa00";
+
+    document.getElementById("color3").value =
+        saved.color3 || "#8000ff";
 });
 
 document.getElementById("highlightBtn").addEventListener("click", async () => {
@@ -29,12 +41,22 @@ document.getElementById("highlightBtn").addEventListener("click", async () => {
         const group3 =
             document.getElementById("group3").value;
 
-        // SAVE KEYWORDS
+        const color1 =
+            document.getElementById("color1").value;
+
+        const color2 =
+            document.getElementById("color2").value;
+
+        const color3 =
+            document.getElementById("color3").value;
 
         await chrome.storage.local.set({
             group1,
             group2,
-            group3
+            group3,
+            color1,
+            color2,
+            color3
         });
 
         const [tab] = await chrome.tabs.query({
@@ -46,31 +68,23 @@ document.getElementById("highlightBtn").addEventListener("click", async () => {
             tab.id,
             {
                 action: "highlight",
+
                 keywords: {
-                    group1: group1
-                        .split(",")
-                        .map(k => k.trim())
-                        .filter(Boolean),
+                    group1: group1.split(",").map(k => k.trim()).filter(Boolean),
+                    group2: group2.split(",").map(k => k.trim()).filter(Boolean),
+                    group3: group3.split(",").map(k => k.trim()).filter(Boolean)
+                },
 
-                    group2: group2
-                        .split(",")
-                        .map(k => k.trim())
-                        .filter(Boolean),
-
-                    group3: group3
-                        .split(",")
-                        .map(k => k.trim())
-                        .filter(Boolean)
+                colors: {
+                    group1: color1,
+                    group2: color2,
+                    group3: color3
                 }
             },
             () => {
 
                 if (chrome.runtime.lastError) {
-
-                    console.error(
-                        chrome.runtime.lastError.message
-                    );
-
+                    console.error(chrome.runtime.lastError.message);
                     return;
                 }
 
@@ -88,18 +102,6 @@ document.getElementById("clearBtn").addEventListener("click", async () => {
 
     try {
 
-        // CLEAR STORAGE
-
-        await chrome.storage.local.remove([
-            "group1",
-            "group2",
-            "group3"
-        ]);
-
-        document.getElementById("group1").value = "";
-        document.getElementById("group2").value = "";
-        document.getElementById("group3").value = "";
-
         const [tab] = await chrome.tabs.query({
             active: true,
             currentWindow: true
@@ -109,19 +111,6 @@ document.getElementById("clearBtn").addEventListener("click", async () => {
             tab.id,
             {
                 action: "clear"
-            },
-            () => {
-
-                if (chrome.runtime.lastError) {
-
-                    console.error(
-                        chrome.runtime.lastError.message
-                    );
-
-                    return;
-                }
-
-                window.close();
             }
         );
 

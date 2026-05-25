@@ -88,7 +88,7 @@ function highlightGroup(keywords, className) {
 
             const mark = document.createElement("mark");
 
-            mark.className = className;
+            mark.style.backgroundColor = className;
 
             mark.setAttribute("data-patent-highlight", "true");
 
@@ -128,17 +128,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         highlightGroup(
             request.keywords.group1,
-            "patent-highlight-group1"
+            request.colors.group1
         );
 
         highlightGroup(
             request.keywords.group2,
-            "patent-highlight-group2"
+            request.colors.group2
         );
 
         highlightGroup(
             request.keywords.group3,
-            "patent-highlight-group3"
+            request.colors.group3
         );
 
         sendResponse({
