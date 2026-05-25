@@ -9,21 +9,24 @@ document.addEventListener("DOMContentLoaded", async () => {
             id: crypto.randomUUID(),
             label: "Base Device",
             color: "#ff0000",
-            keywords: []
+            keywords: [],
+            collapsed: false
         },
 
         {
             id: crypto.randomUUID(),
             label: "Function / Business Logic",
             color: "#00aa00",
-            keywords: []
+            keywords: [],
+            collapsed: false
         },
 
         {
             id: crypto.randomUUID(),
             label: "Technical",
             color: "#d9b3ff",
-            keywords: []
+            keywords: [],
+            collapsed: false
         }
     ];
 
@@ -55,31 +58,52 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             wrapper.innerHTML = `
 
-                <input
-                    type="text"
-                    class="group-label"
-                    value="${group.label}"
-                >
-
-                <textarea class="group-keywords">${group.keywords.join(", ")}</textarea>
-
-                <div class="color-row">
-
-                    <label>Color:</label>
-
-                    <input
-                        type="color"
-                        class="group-color"
-                        value="${group.color}"
-                    >
-
-                </div>
-
-                <button class="delete-group-btn">
-                    Delete Group
-                </button>
-            `;
-
+					<div class="group-header">
+				
+						<button class="collapse-btn">
+							${group.collapsed ? "▶" : "▼"}
+						</button>
+				
+						<input
+							type="text"
+							class="group-label"
+							value="${group.label}"
+						>
+				
+					</div>
+				
+					<div class="group-content"
+						 style="display: ${group.collapsed ? "none" : "block"};">
+				
+						<textarea class="group-keywords">${group.keywords.join(", ")}</textarea>
+				
+						<div class="color-row">
+				
+							<label>Color:</label>
+				
+							<input
+								type="color"
+								class="group-color"
+								value="${group.color}"
+							>
+				
+						</div>
+				
+						<button class="delete-group-btn">
+							Delete Group
+						</button>
+				
+					</div>
+				`;
+				
+				wrapper.querySelector(".collapse-btn")
+						.addEventListener("click", () => {
+					
+							group.collapsed =
+								!group.collapsed;
+					
+							renderGroups();
+						});
             // -----------------------------
             // LABEL
             // -----------------------------
