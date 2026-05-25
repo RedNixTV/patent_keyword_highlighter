@@ -123,3 +123,7 @@ button {
 .group-block.dragging {
     opacity: 0.5;
 }
+.active-preset {
+    outline: 3px solid black;
+    transform: scale(1.15);
+}

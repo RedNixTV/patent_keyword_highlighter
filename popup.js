@@ -104,36 +104,42 @@ document.addEventListener("DOMContentLoaded", async () => {
 						
 							<button
 								class="preset-btn"
+								${group.color === "#ff0000" ? "active-preset" : ""}"
 								data-color="#ff0000"
 								style="background:#ff0000;">
 							</button>
 						
 							<button
 								class="preset-btn"
+								${group.color === "#ff8800" ? "active-preset" : ""}"
 								data-color="#ff8800"
 								style="background:#ff8800;">
 							</button>
 						
 							<button
 								class="preset-btn"
+								${group.color === "#dddddd" ? "active-preset" : ""}"
 								data-color="#dddddd"
 								style="background:#dddddd;">
 							</button>
 						
 							<button
 								class="preset-btn"
+								${group.color === "#00aa00" ? "active-preset" : ""}"
 								data-color="#00aa00"
 								style="background:#00aa00;">
 							</button>
 						
 							<button
 								class="preset-btn"
+								${group.color === "#0088ff" ? "active-preset" : ""}"
 								data-color="#0088ff"
 								style="background:#0088ff;">
 							</button>
 						
 							<button
 								class="preset-btn"
+								${group.color === "#d9b3ff" ? "active-preset" : ""}"
 								data-color="#d9b3ff"
 								style="background:#d9b3ff;">
 							</button>
@@ -247,6 +253,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 			
 						const color =
 							button.dataset.color;
+							
+						if (group.color === color) {
+							return;
+						}
 			
 						group.color =
 							color;
