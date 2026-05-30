@@ -13,6 +13,11 @@ patent-highlighter/
 Architecture Philosophy
 
 The project intentionally separates responsibilities:
+manifest.json
+Permissions and content script loading remain identical.
+
+popup.html
+renders buttons and the container.
 
 content.js
 
@@ -29,10 +34,10 @@ popup.js
 
 Responsible only for:
 
-user interaction
+user interaction (User edits groups)
 state management
-storage
-messaging
+storage (Store groups)
+messaging (Send groups to content.js)
 rendering popup UI
 
 manages groups

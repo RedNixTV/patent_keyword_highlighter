@@ -1,4 +1,8 @@
 console.log("CONTENT SCRIPT LOADED");
+// Cache compiled regex objects so they can be reused
+// across multiple highlight runs.
+const regexCache = new Map();
+
 function clearHighlights() {
 
     const marks = document.querySelectorAll("mark[data-patent-highlight]");
@@ -15,6 +19,24 @@ function clearHighlights() {
 
 function escapeRegex(text) {
     return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function getRegex(group) {
+
+    const key =
+        [...group.keywords]
+            .sort()
+            .join(",");
+
+    if (!regexCache.has(key)) {
+
+        regexCache.set(
+            key,
+            buildRegex(group.keywords)
+        );
+    }
+
+    return regexCache.get(key);
 }
 
 function buildRegex(keywords) {
@@ -142,7 +164,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		request.groups.forEach(group => {
 		
 			const regex =
-				buildRegex(group.keywords);
+				getRegex(group);
 		
 			highlightGroup(
 				regex,
