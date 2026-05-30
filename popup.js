@@ -45,6 +45,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 			);
 		});
 		
+	const toggle =
+		document.getElementById("autoHighlight");
+	
+	const label =
+		document.getElementById("toggleLabel");
+	
+	function updateLabel() {
+		label.textContent =
+			toggle.checked
+				? "Active"
+				: "Inactive";
+	}
+	
+	updateLabel();
+	
+	toggle.addEventListener("change", updateLabel);
+		
     const groupsContainer =
         document.getElementById("groupsContainer");
 

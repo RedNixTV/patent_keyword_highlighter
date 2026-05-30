@@ -11,13 +11,19 @@
 <body>
 	<div class="top-bar">
 	
-		<label class="toggle-row">
-			<input
-				type="checkbox"
-				id="autoHighlight"
-			>
-			Active
-		</label>
+		<div class="toggle-row">
+	
+			<label class="switch">
+				<input
+					type="checkbox"
+					id="autoHighlight"
+				>
+				<span class="slider"></span>
+			</label>
+	
+			<span id="toggleLabel">Active</span>
+	
+		</div>
 	
 		<button id="resetBtn">
 			Reset

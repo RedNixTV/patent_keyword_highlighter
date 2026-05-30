@@ -132,11 +132,77 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
 }
 
 .toggle-row {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+}
+#resetBtn {
+    width: auto;
+    margin-top: 0;
+    padding: 6px 12px;
+
+    background: #990000;
+    color: white;
+
+    border: none;
+    border-radius: 0;
+
+    font-weight: bold;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+
+    background: #ccc;
+    cursor: pointer;
+
+    transition: 0.2s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    content: "";
+
+    position: absolute;
+
+    width: 14px;
+    height: 14px;
+
+    left: 3px;
+    bottom: 3px;
+
+    background: white;
+
+    transition: 0.2s;
+    border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+    background: #2196f3;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
+.toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
