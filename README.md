@@ -51,6 +51,10 @@ Save
 ↓
 Highlight
 
+Toggle Match Whole Word Only
+↓
+Highlights update immediately
+
 Refresh page
 ↓
 Highlight
@@ -79,6 +83,49 @@ Active ON
 ```
 
 ---
+
+## Match Whole Word Only
+
+By default, keyword matching is broad.
+
+Keyword:
+
+```text
+roof
+```
+
+Matches:
+
+```text
+roof
+roofs
+roofing
+rooftop
+```
+
+Enable **Match Whole Word Only** to require exact word matches.
+
+Keyword:
+
+```text
+roof
+```
+
+Matches:
+
+```text
+roof
+```
+
+Does not match:
+
+```text
+roofs
+roofing
+rooftop
+```
+
+This option is useful when searching for exact terminology and reducing false positives.
 
 ## How Highlighting Works
 
@@ -230,6 +277,7 @@ No UI logic.
 * Dynamic groups
 * Persistent storage
 * Active toggle
+* Match whole word only
 * Save workflow
 * Reset workflow
 * Collapse / expand

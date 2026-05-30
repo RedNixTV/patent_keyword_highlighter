@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
     const settings =
-		await chrome.storage.local.get(
-			"autoHighlight"
-		);
+		await chrome.storage.local.get([
+			"autoHighlight",
+			"wholeWordOnly"
+		]);
 	
 	if (settings.autoHighlight === undefined) {
 	
@@ -41,6 +42,42 @@ document.addEventListener("DOMContentLoaded", async () => {
 						enabled
 							? "refresh"
 							: "clear"
+				}
+			);
+		});
+	
+		if (settings.wholeWordOnly === undefined) {
+		
+			settings.wholeWordOnly = false;
+		
+			await chrome.storage.local.set({
+				wholeWordOnly: false
+			});
+		}
+		
+		document.getElementById(
+			"wholeWordOnly"
+		).checked =
+			settings.wholeWordOnly;
+			
+	document
+		.getElementById("wholeWordOnly")
+		.addEventListener("change", async (e) => {
+	
+			await chrome.storage.local.set({
+				wholeWordOnly: e.target.checked
+			});
+	
+			const [tab] =
+				await chrome.tabs.query({
+					active: true,
+					currentWindow: true
+				});
+	
+			chrome.tabs.sendMessage(
+				tab.id,
+				{
+					action: "refresh"
 				}
 			);
 		});
@@ -447,12 +484,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         await chrome.storage.local.set({
             groups,
-            autoHighlight: true
+            autoHighlight: true,
+            wholeWordOnly: false
         });
 
         document.getElementById(
             "autoHighlight"
         ).checked = true;
+        
+        document.getElementById(
+			"wholeWordOnly"
+		).checked = false;
 
         renderGroups();
 

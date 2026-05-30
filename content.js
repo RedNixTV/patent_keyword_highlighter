@@ -21,34 +21,46 @@ function escapeRegex(text) {
     return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function getRegex(group) {
+function getRegex(group, wholeWordOnly) {
 
     const key =
-        [...group.keywords]
-            .sort()
-            .join(",");
+    		`${wholeWordOnly}|` +
+			[...group.keywords]
+				.sort()
+				.join(",");
 
     if (!regexCache.has(key)) {
 
         regexCache.set(
             key,
-            buildRegex(group.keywords)
+            buildRegex(
+				group.keywords,
+				wholeWordOnly
+			)
         );
     }
 
     return regexCache.get(key);
 }
 
-function buildRegex(keywords) {
+function buildRegex(
+    keywords,
+    wholeWordOnly
+) {
 
     if (!keywords.length) {
         return null;
     }
 
+    const pattern =
+        keywords
+            .map(escapeRegex)
+            .join("|");
+
     return new RegExp(
-        "\\b(" +
-        keywords.map(escapeRegex).join("|") +
-        ")\\b",
+        wholeWordOnly
+            ? `\\b(${pattern})\\b`
+            : `(${pattern})`,
         "gi"
     );
 }
@@ -146,14 +158,24 @@ function highlightGroup(regex, color) {
     });
 }
 
-function applyHighlights(groups) {
+async function applyHighlights(groups)  {
 
     clearHighlights();
+    const settings =
+		await chrome.storage.local.get(
+			"wholeWordOnly"
+		);
+	
+	const wholeWordOnly =
+		settings.wholeWordOnly === true;
 
     groups.forEach(group => {
 
         const regex =
-            getRegex(group);
+			getRegex(
+				group,
+				wholeWordOnly
+			);
 
         highlightGroup(
             regex,
