@@ -1,6 +1,7 @@
 # Changelog
 
 ## v1.1.0
+Stable v1.1 before phrase engine
 
 ### Added
 
