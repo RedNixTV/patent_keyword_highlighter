@@ -127,3 +127,16 @@ button {
     outline: 3px solid black;
     transform: scale(1.15);
 }
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}

@@ -1,7 +1,90 @@
 <img width="378" height="584" alt="Screenshot 2026-05-25 at 6 44 55 PM" src="https://github.com/user-attachments/assets/2a3d668a-2117-4b1b-9b95-df5996221827" />
 
-When you click Highlight:
+# Patent Highlighter
 
+A browser extension designed for fast patent and prior art scanning using dynamic keyword highlighting.
+
+Built specifically for:
+
+* Google Patents
+* FreePatentsOnline
+* USPTO pages
+* Technical documentation
+* Research articles
+
+The extension focuses on:
+
+* Speed
+* Readability
+* Workflow efficiency
+* Stable DOM rendering
+* Low false positives
+
+---
+
+## User Workflow
+
+### First Time Setup
+
+Active is enabled by default.
+
+```text
+Open extension
+↓
+Enter keywords
+↓
+Save
+↓
+Highlights appear
+```
+
+### Daily Usage
+
+```text
+Install extension
+↓
+Active ON
+
+Enter keywords
+↓
+Save
+↓
+Highlight
+
+Refresh page
+↓
+Highlight
+
+Open new patent
+↓
+Highlight
+
+Toggle OFF
+↓
+Clear
+
+Toggle ON
+↓
+Highlight
+
+Reset
+↓
+Delete keywords
+↓
+Restore defaults
+↓
+Clear page
+↓
+Active ON
+```
+
+---
+
+## How Highlighting Works
+
+When Save is clicked:
+
+```text
 Popup
 ↓
 sendMessage()
@@ -10,200 +93,191 @@ content.js
 ↓
 TreeWalker
 ↓
-create <mark> elements (The <mark> elements only exist in the current page's DOM.)
+Highlights appear
+↓
+create <mark> elements
+```
+
+The highlight engine modifies the current page DOM by inserting `<mark>` elements around matching keywords.
 
 Example:
 
 Before:
 
+```html
 The roof contains multiple facets.
+```
 
 After:
 
+```html
 The <mark>roof</mark> contains multiple <mark>facets</mark>.
+```
 
+Highlights only exist in the current page DOM and are recreated automatically when Auto Highlight is active.
+
+---
+
+## Active Toggle
+
+The Active toggle controls whether highlights are visible.
+
+### Active ON
+
+```text
+Highlights automatically appear
+on page load and refresh.
+```
+
+### Active OFF
+
+```text
+Highlights are removed
+from the current page.
+```
+
+Keywords and settings remain saved.
+
+---
+
+## Save
+
+Save performs two actions:
+
+1. Stores all group settings in Chrome local storage.
+2. Refreshes highlighting on the current page.
+
+Save is the primary action users perform after editing keywords.
+
+---
+
+## Reset
+
+Reset performs the following actions:
+
+* Removes all highlights from the current page.
+* Deletes all saved keywords.
+* Restores default groups.
+* Leaves Active enabled.
+
+After Reset, users can immediately begin entering new keywords.
+
+---
+
+## Project Structure
+
+```text
 patent-highlighter/
 │
 ├── manifest.json
-├── popup.html      # popup structure only
-├── popup.js        # UI behavior, state, rendering
-├── content.js      # DOM highlighting engine
-├── styles.css      # visual styling only
-├── README.md    
-├── CHANGELOG.md      
+├── popup.html
+├── popup.js
+├── content.js
+├── style.css
+├── README.md
+├── CHANGELOG.md
+```
 
-Architecture Philosophy
+---
 
-The project intentionally separates responsibilities:
+## Architecture Philosophy
 
-manifest.json
-Permissions and content script loading remain identical.
+The project intentionally separates responsibilities.
 
-popup.html
-renders buttons and the container.
+### manifest.json
 
-content.js
+Responsible for:
 
-Responsible only for:
+* Permissions
+* Content script loading
 
-DOM scanning
-text matching
-highlight rendering (responsible for modifying the page DOM)
-highlight clearing
+### popup.html
+
+Responsible for:
+
+* Popup layout
+* Buttons
+* Form controls
+
+### popup.js
+
+Responsible for:
+
+* User interaction
+* State management
+* Chrome storage
+* Messaging
+* Rendering popup UI
+
+No page traversal logic.
+
+### content.js
+
+Responsible for:
+
+* DOM scanning
+* Text matching
+* Highlight rendering
+* Highlight clearing
+* Regex caching
 
 No UI logic.
 
-popup.js
-
-Responsible only for:
-
-user interaction (User edits groups)
-state management
-storage (Store groups)
-messaging (Send groups to content.js)
-rendering popup UI
-
-manages groups
-manages colors
-manages storage
-sends messages
-
-No DOM page traversal logic.
-
-What you currently have implemented:
-	•	dynamic groups
-	•	persistent storage
-	•	collapse/expand
-	•	enable/disable
-	•	drag reorder
-	•	preset colors
-	•	custom colors
-	•	DOM safe highlighting
-	•	delete protection
-	
-# Patent Highlighter
-
-A browser extension designed for fast patent and prior art scanning using dynamic keyword highlighting.
-
-Built specifically for large patent pages such as:
-- Google Patents
-- FreePatentsOnline
-- USPTO pages
-- technical documentation
-- research articles
-
-The extension focuses on:
-- speed
-- readability
-- workflow efficiency
-- stable DOM rendering
-- low false positives
-
 ---
 
-# Current Features
+## Current Features
 
-## Dynamic Keyword Groups
-Create multiple independent keyword groups for different invention concepts.
-
-Examples:
-- Base Device
-- Functional Logic
-- Technical Concepts
-- AI / Machine Learning
-- Materials
-- Manufacturing
-
-Each group supports:
-- custom labels
-- independent keyword sets
-- independent colors
-
----
-
-## Persistent Storage
-All groups and settings are automatically saved using Chrome local storage.
-
-The extension restores:
-- keyword lists
-- colors
-- collapse state
-- enabled state
-- group ordering
-
-after browser restart.
-
----
-
-## Collapse / Expand Groups
-Groups can be collapsed to reduce UI clutter during large invention searches.
-
-Useful for:
-- large synonym lists
-- technical terminology
-- exploratory keyword groups
-
----
-
-## Enable / Disable Groups
-Temporarily disable groups without deleting keywords.
-
-Useful when:
-- reducing visual noise
-- testing terminology relevance
-- comparing search strategies
-
----
-
-## Drag Reorder
-Groups can be reordered using drag and drop.
-
-This helps organize:
-1. core invention concepts
-2. secondary terminology
-3. exploratory concepts
-4. weak relevance groups
-
----
-
-## Preset + Custom Colors
-Supports:
-- preset highlight palettes
-- custom color picker
-- active color indication
-
-Designed to improve fast visual scanning of patent pages.
+* Dynamic groups
+* Persistent storage
+* Active toggle
+* Save workflow
+* Reset workflow
+* Collapse / expand
+* Enable / disable groups
+* Drag reorder
+* Preset colors
+* Custom colors
+* Regex caching
+* DOM safe highlighting
+* Delete protection
 
 ---
 
 ## DOM Safe Highlighting
+
 Uses:
-- `TreeWalker`
-- text node traversal
-- `document.createElement("mark")`
 
-instead of unsafe:
+* TreeWalker
+* Text node traversal
+* document.createElement("mark")
+
+instead of:
+
 ```js
-innerHTML.replace()
+innerHTML.replace(...)
+```
 
+This avoids breaking page structure and improves compatibility with large patent pages.
 
-Planned Features
-Phrase Mode
+---
 
-Support:
+## Planned Features
 
-"roof waste factor"
-"machine learning"
-"semantic segmentation"
+### Phrase Mode
 
-in addition to single word matching.
+Support for:
 
-Group Statistics
+* "roof waste factor"
+* "machine learning"
+* "semantic segmentation"
+
+in addition to single-word matching.
+
+### Group Statistics
 
 Potential metrics:
 
-total matches
-keyword density
-phrase density
-relevance scoring
-
+* Total matches
+* Keyword density
+* Phrase density
+* Relevance scoring

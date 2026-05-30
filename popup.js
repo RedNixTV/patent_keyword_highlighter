@@ -1,5 +1,50 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+    const settings =
+		await chrome.storage.local.get(
+			"autoHighlight"
+		);
+	
+	if (settings.autoHighlight === undefined) {
+	
+		settings.autoHighlight = true;
+	
+		await chrome.storage.local.set({
+			autoHighlight: true
+		});
+	}
+	
+	document.getElementById("autoHighlight").checked =
+		settings.autoHighlight;
+		
+	document
+		.getElementById("autoHighlight")
+		.addEventListener("change", async (e) => {
+	
+			const enabled =
+				e.target.checked;
+	
+			await chrome.storage.local.set({
+				autoHighlight: enabled
+			});
+	
+			const [tab] =
+				await chrome.tabs.query({
+					active: true,
+					currentWindow: true
+				});
+	
+			chrome.tabs.sendMessage(
+				tab.id,
+				{
+					action:
+						enabled
+							? "refresh"
+							: "clear"
+				}
+			);
+		});
+		
     const groupsContainer =
         document.getElementById("groupsContainer");
 
@@ -346,46 +391,65 @@ document.addEventListener("DOMContentLoaded", async () => {
     // HIGHLIGHT
     // -----------------------------------
 
-    document.getElementById("highlightBtn")
-        .addEventListener("click", async () => {
+    document.getElementById("saveBtn")
+    .addEventListener("click", async () => {
 
-            await chrome.storage.local.set({
-                groups
+        await chrome.storage.local.set({
+            groups
+        });
+
+        const [tab] =
+            await chrome.tabs.query({
+                active: true,
+                currentWindow: true
             });
 
-            const [tab] =
-                await chrome.tabs.query({
-                    active: true,
-                    currentWindow: true
-                });
+        const enabled =
+			document.getElementById(
+				"autoHighlight"
+			).checked;
+		
+		chrome.tabs.sendMessage(
+			tab.id,
+			{
+				action:
+					enabled
+						? "refresh"
+						: "clear"
+			}
+		);
+    });
+    
+    document.getElementById("resetBtn")
+    .addEventListener("click", async () => {
 
-            chrome.tabs.sendMessage(
-                tab.id,
-                {
-                    action: "highlight",
-                    groups: groups.filter(group => group.enabled)
-                }
-            );
+        groups = DEFAULT_GROUPS.map(group => ({
+            ...group,
+            id: crypto.randomUUID()
+        }));
+
+        await chrome.storage.local.set({
+            groups,
+            autoHighlight: true
         });
 
-    // -----------------------------------
-    // CLEAR
-    // -----------------------------------
+        document.getElementById(
+            "autoHighlight"
+        ).checked = true;
 
-    document.getElementById("clearBtn")
-        .addEventListener("click", async () => {
+        renderGroups();
 
-            const [tab] =
-                await chrome.tabs.query({
-                    active: true,
-                    currentWindow: true
-                });
+        const [tab] =
+            await chrome.tabs.query({
+                active: true,
+                currentWindow: true
+            });
 
-            chrome.tabs.sendMessage(
-                tab.id,
-                {
-                    action: "clear"
-                }
-            );
-        });
+        chrome.tabs.sendMessage(
+            tab.id,
+            {
+                action: "clear"
+            }
+        );
+    });
 });

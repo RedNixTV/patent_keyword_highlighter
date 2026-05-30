@@ -146,6 +146,22 @@ function highlightGroup(regex, color) {
     });
 }
 
+function applyHighlights(groups) {
+
+    clearHighlights();
+
+    groups.forEach(group => {
+
+        const regex =
+            getRegex(group);
+
+        highlightGroup(
+            regex,
+            group.color
+        );
+    });
+}
+
 // -----------------------------------
 // AUTO HIGHLIGHT ON PAGE LOAD
 // -----------------------------------
@@ -153,57 +169,55 @@ function highlightGroup(regex, color) {
 (async () => {
 
     const saved =
-        await chrome.storage.local.get("groups");
+        await chrome.storage.local.get([
+            "groups",
+            "autoHighlight"
+        ]);
 
-    const groups =
-        saved.groups || [];
+    if (saved.autoHighlight !== true) {
+        return;
+    }
 
-    groups
-        .filter(group => group.enabled)
-        .forEach(group => {
-
-            const regex =
-                getRegex(group);
-
-            highlightGroup(
-                regex,
-                group.color
-            );
-        });
+    applyHighlights(
+        (saved.groups || [])
+            .filter(group => group.enabled)
+    );
 
 })();
 
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(
+    async (request, sender, sendResponse) => {
 
-    if (request.action === "clear") {
+        if (request.action === "clear") {
 
-        clearHighlights();
+            clearHighlights();
+        }
+
+        if (request.action === "highlight") {
+
+            applyHighlights(
+                request.groups
+            );
+        }
+
+        if (request.action === "refresh") {
+
+            const saved =
+                await chrome.storage.local.get(
+                    "groups"
+                );
+
+            applyHighlights(
+                (saved.groups || [])
+                    .filter(group => group.enabled)
+            );
+        }
 
         sendResponse({
             success: true
         });
+
+        return true;
     }
-
-    if (request.action === "highlight") {
-
-		clearHighlights();
-	
-		request.groups.forEach(group => {
-		
-			const regex =
-				getRegex(group);
-		
-			highlightGroup(
-				regex,
-				group.color
-			);
-		});
-	
-		sendResponse({
-			success: true
-		});
-	}
-
-    return true;
-});
+);
