@@ -64,12 +64,14 @@ function highlightGroup(keywords, className) {
     nodes.forEach(node => {
 
         const text = node.nodeValue;
-
-        if (!regex.test(text)) {
-            return;
-        }
-
-        regex.lastIndex = 0;
+		
+		const hasMatch = regex.test(text);
+		
+		regex.lastIndex = 0;
+		
+		if (!hasMatch) {
+			return;
+		}
 
         const fragment = document.createDocumentFragment();
 
