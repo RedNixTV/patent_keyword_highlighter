@@ -35,6 +35,11 @@ storage
 messaging
 rendering popup UI
 
+manages groups
+manages colors
+manages storage
+sends messages
+
 No DOM page traversal logic.
 
 What you currently have implemented:

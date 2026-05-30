@@ -17,14 +17,25 @@ function escapeRegex(text) {
     return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function highlightGroup(keywords, className) {
+function buildRegex(keywords) {
 
-    if (!keywords.length) return;
+    if (!keywords.length) {
+        return null;
+    }
 
-    const regex = new RegExp(
-        "\\b(" + keywords.map(escapeRegex).join("|") + ")\\b",
+    return new RegExp(
+        "\\b(" +
+        keywords.map(escapeRegex).join("|") +
+        ")\\b",
         "gi"
     );
+}
+
+function highlightGroup(regex, color) {
+
+    if (!regex) {
+        return;
+    }
 
     const walker = document.createTreeWalker(
         document.body,
@@ -90,7 +101,7 @@ function highlightGroup(keywords, className) {
 
             const mark = document.createElement("mark");
 
-            mark.style.backgroundColor = className;
+            mark.style.backgroundColor = color;
 
             mark.setAttribute("data-patent-highlight", "true");
 
@@ -129,9 +140,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		clearHighlights();
 	
 		request.groups.forEach(group => {
-	
+		
+			const regex =
+				buildRegex(group.keywords);
+		
 			highlightGroup(
-				group.keywords,
+				regex,
 				group.color
 			);
 		});
