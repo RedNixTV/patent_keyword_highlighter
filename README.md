@@ -1,5 +1,27 @@
 <img width="378" height="584" alt="Screenshot 2026-05-25 at 6 44 55 PM" src="https://github.com/user-attachments/assets/2a3d668a-2117-4b1b-9b95-df5996221827" />
 
+When you click Highlight:
+
+Popup
+↓
+sendMessage()
+↓
+content.js
+↓
+TreeWalker
+↓
+create <mark> elements (The <mark> elements only exist in the current page's DOM.)
+
+Example:
+
+Before:
+
+The roof contains multiple facets.
+
+After:
+
+The <mark>roof</mark> contains multiple <mark>facets</mark>.
+
 patent-highlighter/
 │
 ├── manifest.json
@@ -13,6 +35,7 @@ patent-highlighter/
 Architecture Philosophy
 
 The project intentionally separates responsibilities:
+
 manifest.json
 Permissions and content script loading remain identical.
 
@@ -25,7 +48,7 @@ Responsible only for:
 
 DOM scanning
 text matching
-highlight rendering
+highlight rendering (responsible for modifying the page DOM)
 highlight clearing
 
 No UI logic.

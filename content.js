@@ -146,6 +146,34 @@ function highlightGroup(regex, color) {
     });
 }
 
+// -----------------------------------
+// AUTO HIGHLIGHT ON PAGE LOAD
+// -----------------------------------
+
+(async () => {
+
+    const saved =
+        await chrome.storage.local.get("groups");
+
+    const groups =
+        saved.groups || [];
+
+    groups
+        .filter(group => group.enabled)
+        .forEach(group => {
+
+            const regex =
+                getRegex(group);
+
+            highlightGroup(
+                regex,
+                group.color
+            );
+        });
+
+})();
+
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     if (request.action === "clear") {
