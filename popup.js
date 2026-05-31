@@ -1,3 +1,11 @@
+const STORAGE_VERSIONS = {
+    V1_0_0: "1.0.0",
+    V1_1_0: "1.1.0"
+};
+
+const STORAGE_VERSION =
+    STORAGE_VERSIONS.V1_1_0;
+    
 document.addEventListener("DOMContentLoaded", async () => {
 
     const settings =
@@ -137,11 +145,58 @@ document.addEventListener("DOMContentLoaded", async () => {
             enabled: true
         }
     ];
-
+    
+    async function runMigrations() {
+	
+		const saved =
+			await chrome.storage.local.get([
+				"storageVersion",
+				"groups"
+			]);
+	
+		let version =
+			saved.storageVersion || STORAGE_VERSIONS.V1_0_0;
+	
+		let groups =
+			saved.groups || [];
+	
+		if (
+			version ===
+			STORAGE_VERSIONS.V1_0_0
+		) {
+	
+			groups = groups.map(group => ({
+	
+				enabled:
+					group.enabled ?? true,
+	
+				collapsed:
+					group.collapsed ?? false,
+	
+				id:
+					group.id ||
+					crypto.randomUUID(),
+	
+				...group
+			}));
+	
+			version =
+				STORAGE_VERSION;
+		}
+	
+		await chrome.storage.local.set({
+	
+			groups,
+			storageVersion: version
+		});
+	}
+	
     // -----------------------------------
     // LOAD GROUPS
     // -----------------------------------
 
+    await runMigrations();
+    
     const saved =
         await chrome.storage.local.get("groups");
 
@@ -159,7 +214,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 	let draggedGroupId = null;
 	async function saveGroups() {
 		await chrome.storage.local.set({
-			groups
+			groups,
+			storageVersion: STORAGE_VERSION
 		});
 	}
 	
@@ -457,6 +513,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         await chrome.storage.local.set({
 		
 			groups,
+			
+			storageVersion:
+				STORAGE_VERSION,
 		
 			profileName:
 				document.getElementById(
@@ -496,6 +555,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         await chrome.storage.local.set({
             groups,
+            storageVersion:
+					STORAGE_VERSION,
             autoHighlight: true,
             wholeWordOnly: false,
             profileName: ""
@@ -551,7 +612,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 					).value.trim() ||
 					"Patent Search Profile",
 	
-				version: "1.1.0",
+				schemaVersion: STORAGE_VERSION,
 	
 				exportedAt:
 					new Date().toISOString(),
@@ -643,20 +704,29 @@ document.addEventListener("DOMContentLoaded", async () => {
 	
 				groups =
 					data.groups.map(group => ({
-	
-						enabled: true,
-						collapsed: false,
-	
-						...group,
-	
+				
 						id:
 							group.id ||
-							crypto.randomUUID()
+							crypto.randomUUID(),
+				
+						enabled:
+							group.enabled ?? true,
+				
+						collapsed:
+							group.collapsed ?? false,
+				
+						phraseMode:
+							group.phraseMode ?? false,
+				
+						...group
 					}));
 	
 				await chrome.storage.local.set({
 	
 					groups,
+					
+					storageVersion:
+						STORAGE_VERSION,
 					
 					profileName:
 							data.profileName || "",
