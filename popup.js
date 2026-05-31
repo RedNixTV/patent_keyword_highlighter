@@ -25,6 +25,10 @@ import {
     renderGroups
 } from "./ui/groupRenderer.js";
 
+import {
+    attachDragHandlers as setupDragHandlers
+} from "./ui/dragDrop.js";
+
 const STORAGE_VERSION = PROFILE_VERSION;
     
 document.addEventListener("DOMContentLoaded", async () => {
@@ -142,8 +146,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 		
 				attachDragHandlers:
 					(wrapper, group) => {
-		
-						// drag code still lives here for now
+				
+						setupDragHandlers({
+							wrapper,
+							group,
+							groups,
+							renderGroups: refreshGroups,
+							persistGroups,
+							getDraggedGroupId: () =>
+								draggedGroupId,
+							setDraggedGroupId: (id) => {
+				
+								draggedGroupId = id;
+							}
+						});
 					},
 		
 				onToggleCollapse:
