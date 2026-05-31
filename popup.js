@@ -19,15 +19,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const settings = await loadSettings();
 	
-	if (settings.autoHighlight === undefined) {
-	
-		settings.autoHighlight = true;
-	
-		await chrome.storage.local.set({
-			autoHighlight: true
-		});
-	}
-	
 	document.getElementById("autoHighlight").checked =
 		settings.autoHighlight;
 		
@@ -58,15 +49,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 				}
 			);
 		});
-	
-		if (settings.wholeWordOnly === undefined) {
-		
-			settings.wholeWordOnly = false;
-		
-			await chrome.storage.local.set({
-				wholeWordOnly: false
-			});
-		}
 		
 		document.getElementById(
 			"wholeWordOnly"
