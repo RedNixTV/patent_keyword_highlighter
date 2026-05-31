@@ -9,7 +9,8 @@ import {
     loadGroups,
     saveGroups,
     loadSettings,
-    saveSettings
+    saveSettings,
+    runMigrations
 } from "./storage.js";
 
 const STORAGE_VERSION = PROFILE_VERSION;
@@ -118,60 +119,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 		
     const groupsContainer =
         document.getElementById("groupsContainer");
-    
-    async function runMigrations() {
-	
-		const saved =
-			await chrome.storage.local.get([
-				"storageVersion",
-				"groups"
-			]);
-	
-		let version =
-			saved.storageVersion || STORAGE_VERSIONS.V1_0_0;
-	
-		let groups =
-			saved.groups || [];
-	
-		if (
-			version ===
-			STORAGE_VERSIONS.V1_0_0
-		) {
-	
-			groups = groups.map(group => ({
-	
-				enabled:
-					group.enabled ?? true,
-	
-				collapsed:
-					group.collapsed ?? false,
-	
-				id:
-					group.id ||
-					crypto.randomUUID(),
-	
-				...group
-			}));
-	
-			version =
-				STORAGE_VERSION;
-		}
-	
-		await chrome.storage.local.set({
-	
-			groups,
-			storageVersion: version
-		});
-	}
 	
     // -----------------------------------
     // LOAD GROUPS
     // -----------------------------------
 
     await runMigrations();
-    
-    const saved =
-        await chrome.storage.local.get("groups");
 
     let groups = await loadGroups();
 
