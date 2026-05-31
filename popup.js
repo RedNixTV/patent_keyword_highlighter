@@ -13,6 +13,11 @@ import {
     runMigrations
 } from "./storage.js";
 
+import {
+    exportProfile,
+    importProfile
+} from "./profiles.js";
+
 const STORAGE_VERSION = PROFILE_VERSION;
     
 document.addEventListener("DOMContentLoaded", async () => {
