@@ -30,7 +30,8 @@ import {
 } from "./ui/dragDrop.js";
 
 import {
-    setupCollapseHandler
+    setupCollapseHandler,
+    setupDeleteHandler
 } from "./ui/groupHandlers.js";
 
 const STORAGE_VERSION = PROFILE_VERSION;
@@ -267,28 +268,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 		
 				onDeleteGroup:
 					(wrapper, group) => {
-		
-						wrapper
-							.querySelector(".delete-group-btn")
-							.addEventListener("click", () => {
-		
-								if (groups.length === 1) {
-		
-									alert(
-										"At least one group is required."
-									);
-		
-									return;
-								}
-		
-								groups =
-									groups.filter(
-										g => g.id !== group.id
-									);
-		
-								refreshGroups();
-								persistGroups();
-							});
+				
+						setupDeleteHandler({
+							wrapper,
+							group,
+							groups,
+							setGroups: (newGroups) => {
+				
+								groups = newGroups;
+							},
+							refreshGroups,
+							persistGroups
+						});
 					}
 			});
 		}
