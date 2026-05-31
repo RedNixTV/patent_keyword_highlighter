@@ -364,6 +364,11 @@ patent-highlighter/
 ├── style.css
 ├── README.md
 ├── CHANGELOG.md
+│
+└── ui/
+    ├── groupRenderer.js
+    ├── dragDrop.js
+    └── groupHandlers.js
 ```
 
 ---
@@ -386,7 +391,16 @@ profiles.js
     Profile management and import/export
 
 popup.js
-    User interface
+    Application orchestration
+
+ui/groupRenderer.js
+    Group rendering and markup generation
+
+ui/dragDrop.js
+    Group drag and drop behavior
+
+ui/groupHandlers.js
+    Group event handlers
 
 content.js
     Page analysis and highlighting
@@ -472,23 +486,29 @@ Responsible for:
 No UI logic.
 
 ### popup.js
+
 Current Structure
 
-├── renderGroups()
-├── createPresetButtons()
-├── import/export handlers
+├── settings initialization
+├── group orchestration
 ├── save/reset handlers
-└── event listeners
+├── import/export handlers
+└── Chrome message dispatching
 
 Responsible for:
 
-User interaction
-Popup rendering
-UI state updates
-Chrome message dispatching
+* Application orchestration
+* Settings initialization
+* Group lifecycle management
+* Save workflow
+* Reset workflow
+* Profile import
+* Profile export
+* Communication with content scripts
 
-No page traversal logic.
-No profile validation logic.
+No rendering logic.
+No drag and drop logic.
+No group event implementation.
 
 ### content.js
 
@@ -503,6 +523,65 @@ Responsible for:
 No UI logic.
 
 ---
+
+### ui/groupRenderer.js
+
+Current Structure
+
+├── createPresetButtons()
+├── createGroupMarkup()
+└── renderGroups()
+
+Responsible for:
+
+* Group markup generation
+* Preset color rendering
+* Group rendering
+
+No storage logic.
+No event implementation.
+
+### ui/dragDrop.js
+
+Current Structure
+
+└── attachDragHandlers()
+
+Responsible for:
+
+* Group drag start
+* Group drag end
+* Group drag over
+* Group drop
+* Group reordering
+
+No rendering logic.
+No storage management.
+
+### ui/groupHandlers.js
+
+Current Structure
+
+├── setupCollapseHandler()
+├── setupDeleteHandler()
+├── setupEnabledHandler()
+├── setupLabelHandler()
+├── setupKeywordsHandler()
+├── setupColorHandler()
+├── setupPresetColorHandler()
+└── createGroupHandlers()
+
+Responsible for:
+
+* Group event registration
+* Collapse behavior
+* Delete behavior
+* Enable/disable behavior
+* Label updates
+* Keyword updates
+* Color updates
+
+No rendering logic.
 
 ## Current Features
 
@@ -564,22 +643,15 @@ This avoids breaking page structure and improves compatibility with large patent
 
 ## Planned Features
 
-### UI Modularization
+### Continued UI Refinement
 
-Future refactors will move popup rendering into dedicated UI modules.
+Future improvements may include:
 
-Planned structure:
-
-ui/
-├── groupRenderer.js
-│   ├── createPresetButtons()
-│   ├── createGroupMarkup()
-│   └── renderGroups()
-
-└── dragDrop.js
-    └── attachDragHandlers()
-
-This will further separate rendering logic from application behavior and reduce popup.js complexity.
+* Additional UI modules
+* Reusable form components
+* Validation helpers
+* Improved profile management workflows
+* Further popup.js simplification
 
 ### Phrase Mode
 
