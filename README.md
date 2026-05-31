@@ -300,6 +300,54 @@ Search software inventions
 
 Profiles can also be shared with teammates, researchers, and trainees.
 --
+## Patent Profile Analytics
+
+Patent Highlighter includes a floating analytics panel that appears directly on the patent page after highlighting is completed.
+
+The panel helps researchers quickly evaluate whether a reference is worth deeper review.
+
+### Analytics Display
+
+Example:
+
+```text
+Patent Profile Match
+
+Computer Vision / AI ............. 147 (37%)
+Complexity / Classification ...... 125 (31%)
+Roof Geometry Extraction ......... 54 (14%)
+Roof Complexity Indicators ....... 30 (8%)
+Estimation / Waste ............... 23 (6%)
+Image Acquisition ................ 18 (4%)
+
+Total Matches: 397
+```
+
+### Features
+
+* Per group match counting
+* Total match counting
+* Percentage based analysis
+* Automatic sorting by match frequency
+* Group color visualization
+* Draggable interface
+* Position persistence across page refreshes
+* Collapse and expand support
+* Close button support
+
+### Research Benefits
+
+The analytics panel transforms keyword highlighting into a patent triage workflow.
+
+Researchers can quickly determine:
+
+* Which concepts dominate a reference
+* Whether an invention aligns with the active search profile
+* Which technical areas receive the most discussion
+* Whether a patent merits detailed review
+
+This significantly reduces time spent reviewing low relevance references.
+
 
 ## Project Structure
 
@@ -364,23 +412,41 @@ No UI logic.
 
 ## Current Features
 
-Dynamic groups
-Named search profiles
-Profile import
-Profile export
-Persistent storage
-Active toggle
-Match whole word only
-Save workflow
-Reset workflow
-Collapse / expand
-Enable / disable groups
-Drag reorder
-Preset colors
-Custom colors
-Regex caching
-DOM safe highlighting
-Delete protection
+### Search Profile Management
+
+* Dynamic groups
+* Named search profiles
+* Profile import
+* Profile export
+* Persistent storage
+* Collapse / expand groups
+* Enable / disable groups
+* Drag reorder groups
+* Preset colors
+* Custom colors
+
+### Highlighting Engine
+
+* Active toggle
+* Match whole word only
+* Save workflow
+* Reset workflow
+* Regex caching
+* DOM safe highlighting
+* Delete protection
+
+### Patent Analytics
+
+* Patent profile analytics panel
+* Per group match statistics
+* Total match counting
+* Percentage based match analysis
+* Group color visualization
+* Automatic sorting by match frequency
+* Draggable analytics panel
+* Persistent analytics panel position
+* Analytics panel collapse / expand
+* Analytics panel close button
 
 ---
 
@@ -406,19 +472,31 @@ This avoids breaking page structure and improves compatibility with large patent
 
 ### Phrase Mode
 
-Support for:
+Support for multi word concepts such as:
 
 * "roof waste factor"
 * "machine learning"
 * "semantic segmentation"
+* "neural network"
 
-in addition to single-word matching.
+Phrase matching will work alongside existing keyword highlighting.
 
-### Group Statistics
+### Search Profile Library
 
-Potential metrics:
+Future support for:
 
-* Total matches
-* Keyword density
-* Phrase density
-* Relevance scoring
+* Multiple saved profiles
+* Quick profile switching
+* Built in profile templates
+* Profile sharing
+
+### Advanced Patent Analytics
+
+Potential future metrics:
+
+* Keyword density scoring
+* Phrase density scoring
+* Coverage analysis
+* Concept clustering
+* Patent comparison metrics
+* Exportable analytics reports
