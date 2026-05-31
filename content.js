@@ -102,120 +102,290 @@ function removeStatsPanel() {
 }
 
 function renderStatsPanel(
-    score,
-    stats
+    stats,
+    groups
 ) {
 
     removeStatsPanel();
+
+    const sortedGroups =
+        Object.entries(stats.groups)
+            .sort((a, b) => b[1] - a[1]);
+
+    const colorMap =
+        Object.fromEntries(
+            groups.map(group => [
+                group.label,
+                group.color
+            ])
+        );
 
     const panel =
         document.createElement("div");
 
     panel.id =
         "patent-relevance-panel";
-    
-    panel.style.cursor = "move";
 
-    panel.style.position =
-        "fixed";
-    
-    let isDragging = false;
-	let offsetX = 0;
-	let offsetY = 0;
-	
-	panel.addEventListener(
-		"mousedown",
-		(e) => {
-	
-			isDragging = true;
-	
-			offsetX =
-				e.clientX -
-				panel.offsetLeft;
-	
-			offsetY =
-				e.clientY -
-				panel.offsetTop;
-		}
-	);
-	
-	document.addEventListener(
-		"mousemove",
-		(e) => {
-	
-			if (!isDragging) {
-				return;
-			}
-	
-			panel.style.left =
-				`${e.clientX - offsetX}px`;
-	
-			panel.style.top =
-				`${e.clientY - offsetY}px`;
-	
-			panel.style.right =
-				"auto";
-		}
-	);
-	
-	document.addEventListener(
-		"mouseup",
-		() => {
-			isDragging = false;
-		}
-	);
-
-    panel.style.top =
-        "10px";
-
-    panel.style.right =
-        "10px";
-
-    panel.style.zIndex =
-        "999999";
-
-    panel.style.background =
-        "white";
-
-    panel.style.border =
-        "1px solid black";
-
-    panel.style.padding =
-        "10px";
-
-    panel.style.fontSize =
-        "12px";
-
-    panel.style.maxWidth =
-        "300px";
-
+    panel.style.position = "fixed";
+    panel.style.top = "10px";
+    panel.style.right = "10px";
+    panel.style.zIndex = "999999";
+    panel.style.background = "#ffffff";
+    panel.style.border = "1px solid #ccc";
+    panel.style.borderRadius = "8px";
     panel.style.boxShadow =
-        "0 2px 8px rgba(0,0,0,.2)";
+        "0 4px 12px rgba(0,0,0,.15)";
+    panel.style.width = "320px";
+    panel.style.fontSize = "13px";
+    panel.style.fontFamily = "Arial, sans-serif";
+    panel.style.overflow = "hidden";
+
+    const rowsHtml =
+        sortedGroups
+            .map(([label, count]) => {
+
+                const pct =
+                    stats.totalMatches
+                        ? Math.round(
+                            count /
+                            stats.totalMatches *
+                            100
+                        )
+                        : 0;
+
+                return `
+                    <div
+                        style="
+                            display:flex;
+                            justify-content:space-between;
+                            margin-bottom:6px;
+                        "
+                    >
+                        <span
+                            style="
+                                color:${colorMap[label]};
+                                font-weight:bold;
+                            "
+                        >
+                            ${label}
+                        </span>
+
+                        <span>
+                            ${count} (${pct}%)
+                        </span>
+                    </div>
+                `;
+            })
+            .join("");
 
     panel.innerHTML = `
-        <h3>Patent Relevance</h3>
+        <div
+            id="statsHeader"
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                background:#f5f5f5;
+                padding:10px;
+                cursor:move;
+                border-bottom:1px solid #ddd;
+            "
+        >
 
-        <div>
-            Score: ${score}/100
+            <div>
+                <span
+                    id="toggleStatsPanel"
+                    style="
+                        cursor:pointer;
+                        margin-right:8px;
+                    "
+                >
+                    ▼
+                </span>
+
+                <strong>
+                    Patent Profile Match
+                </strong>
+            </div>
+
+            <button
+                id="closeStatsPanel"
+                style="
+                    width:auto;
+                    margin:0;
+                    padding:2px 8px;
+                "
+            >
+                ✕
+            </button>
+
         </div>
 
-        <hr>
+        <div
+            id="statsBody"
+            style="
+                padding:10px;
+            "
+        >
 
-        ${Object.entries(stats.groups)
-            .map(([label, count]) =>
-                `<div>${label}: ${count}</div>`
-            )
-            .join("")}
+            ${rowsHtml}
 
-        <hr>
+            <hr>
 
-        <div>
-            Total Matches:
-            ${stats.totalMatches}
+            <div
+                style="
+                    font-weight:bold;
+                    text-align:right;
+                "
+            >
+                Total Matches:
+                ${stats.totalMatches}
+            </div>
+
         </div>
     `;
 
     document.body.appendChild(panel);
+
+    // -----------------------------
+    // CLOSE
+    // -----------------------------
+
+    panel.querySelector(
+        "#closeStatsPanel"
+    ).addEventListener(
+        "click",
+        () => panel.remove()
+    );
+
+    // -----------------------------
+    // COLLAPSE
+    // -----------------------------
+
+    const toggle =
+        panel.querySelector(
+            "#toggleStatsPanel"
+        );
+
+    const body =
+        panel.querySelector(
+            "#statsBody"
+        );
+
+    toggle.addEventListener(
+        "click",
+        () => {
+
+            const hidden =
+                body.style.display === "none";
+
+            body.style.display =
+                hidden
+                    ? "block"
+                    : "none";
+
+            toggle.textContent =
+                hidden
+                    ? "▼"
+                    : "▶";
+        }
+    );
+
+    // -----------------------------
+    // DRAGGING
+    // -----------------------------
+
+    const header =
+        panel.querySelector(
+            "#statsHeader"
+        );
+
+    let dragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    header.addEventListener(
+        "mousedown",
+        e => {
+
+            dragging = true;
+
+            offsetX =
+                e.clientX -
+                panel.offsetLeft;
+
+            offsetY =
+                e.clientY -
+                panel.offsetTop;
+        }
+    );
+
+    document.addEventListener(
+        "mousemove",
+        e => {
+
+            if (!dragging) {
+                return;
+            }
+
+            panel.style.left =
+                `${e.clientX - offsetX}px`;
+
+            panel.style.top =
+                `${e.clientY - offsetY}px`;
+
+            panel.style.right =
+                "auto";
+        }
+    );
+
+    document.addEventListener(
+        "mouseup",
+        () => {
+
+            if (!dragging) {
+                return;
+            }
+
+            dragging = false;
+
+            chrome.storage.local.set({
+                statsPanelLeft:
+                    panel.style.left,
+
+                statsPanelTop:
+                    panel.style.top
+            });
+        }
+    );
+
+    // -----------------------------
+    // RESTORE POSITION
+    // -----------------------------
+
+    chrome.storage.local.get(
+        [
+            "statsPanelLeft",
+            "statsPanelTop"
+        ],
+        saved => {
+
+            if (
+                saved.statsPanelLeft &&
+                saved.statsPanelTop
+            ) {
+
+                panel.style.left =
+                    saved.statsPanelLeft;
+
+                panel.style.top =
+                    saved.statsPanelTop;
+
+                panel.style.right =
+                    "auto";
+            }
+        }
+    );
 }
 
 function highlightGroup(regex, color, groupLabel, stats) {
@@ -348,15 +518,10 @@ async function applyHighlights(groups)  {
 			stats
         );
     });
-    
-    const score =
-		calculateRelevanceScore(
-			stats
-		);
 	
 	renderStatsPanel(
-		score,
-		stats
+		stats,
+		groups
 	);
 }
 
