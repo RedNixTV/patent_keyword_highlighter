@@ -101,7 +101,7 @@ function removeStatsPanel() {
         ?.remove();
 }
 
-function renderStatsPanel(
+async function renderStatsPanel(
     stats,
     groups
 ) {
@@ -122,13 +122,38 @@ function renderStatsPanel(
 
     const panel =
         document.createElement("div");
+    
+    const savedPosition =
+		await chrome.storage.local.get([
+			"statsPanelLeft",
+			"statsPanelTop"
+		]);
 
     panel.id =
         "patent-relevance-panel";
 
     panel.style.position = "fixed";
-    panel.style.top = "10px";
-    panel.style.right = "10px";
+	
+	if (
+		savedPosition.statsPanelLeft &&
+		savedPosition.statsPanelTop
+	) {
+	
+		panel.style.left =
+			savedPosition.statsPanelLeft;
+	
+		panel.style.top =
+			savedPosition.statsPanelTop;
+	
+		panel.style.right =
+			"auto";
+	}
+	else {
+	
+		panel.style.top = "10px";
+		panel.style.right = "10px";
+	}
+	
     panel.style.zIndex = "999999";
     panel.style.background = "#ffffff";
     panel.style.border = "1px solid #ccc";
@@ -358,34 +383,6 @@ function renderStatsPanel(
             });
         }
     );
-
-    // -----------------------------
-    // RESTORE POSITION
-    // -----------------------------
-
-    chrome.storage.local.get(
-        [
-            "statsPanelLeft",
-            "statsPanelTop"
-        ],
-        saved => {
-
-            if (
-                saved.statsPanelLeft &&
-                saved.statsPanelTop
-            ) {
-
-                panel.style.left =
-                    saved.statsPanelLeft;
-
-                panel.style.top =
-                    saved.statsPanelTop;
-
-                panel.style.right =
-                    "auto";
-            }
-        }
-    );
 }
 
 function highlightGroup(regex, color, groupLabel, stats) {
@@ -519,7 +516,7 @@ async function applyHighlights(groups)  {
         );
     });
 	
-	renderStatsPanel(
+	await renderStatsPanel(
 		stats,
 		groups
 	);
