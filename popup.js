@@ -14,7 +14,6 @@ import {
 } from "./storage.js";
 
 import {
-    exportProfile,
     importProfile,
     createProfileData,
     parseProfileFile
@@ -527,81 +526,60 @@ document.addEventListener("DOMContentLoaded", async () => {
 			if (!file) {
 				return;
 			}
-	
-			const text =
-				await file.text();
+
 	
 			try {
 	
 				const data =
-					JSON.parse(text);
-	
-				if (!Array.isArray(data.groups)) {
-	
+						await parseProfileFile(
+							file
+						);
+					
+					const profile =
+						await importProfile(
+							data
+						);
+					
+					groups =
+						profile.groups;
+					
+					await chrome.storage.local.set({
+					
+						groups,
+					
+						storageVersion:
+							STORAGE_VERSION,
+					
+						profileName:
+							profile.profileName || "",
+					
+						autoHighlight:
+							profile.autoHighlight ?? true,
+					
+						wholeWordOnly:
+							profile.wholeWordOnly ?? false
+					});
+					
+					document.getElementById(
+						"autoHighlight"
+					).checked =
+						profile.autoHighlight ?? true;
+					
+					document.getElementById(
+						"wholeWordOnly"
+					).checked =
+						profile.wholeWordOnly ?? false;
+					
+					document.getElementById(
+						"profileName"
+					).value =
+						profile.profileName || "";
+					
+					renderGroups();
+					
 					alert(
-						"Invalid profile file."
+						"Profile imported successfully."
 					);
-	
-					return;
-				}
-	
-				groups =
-					data.groups.map(group => ({
-				
-						id:
-							group.id ||
-							crypto.randomUUID(),
-				
-						enabled:
-							group.enabled ?? true,
-				
-						collapsed:
-							group.collapsed ?? false,
-				
-						phraseMode:
-							group.phraseMode ?? false,
-				
-						...group
-					}));
-	
-				await chrome.storage.local.set({
-	
-					groups,
-					
-					storageVersion:
-						STORAGE_VERSION,
-					
-					profileName:
-							data.profileName || "",
-	
-					autoHighlight:
-						data.autoHighlight ?? true,
-	
-					wholeWordOnly:
-						data.wholeWordOnly ?? false
-				});
-	
-				document.getElementById(
-					"autoHighlight"
-				).checked =
-					data.autoHighlight ?? true;
-	
-				document.getElementById(
-					"wholeWordOnly"
-				).checked =
-					data.wholeWordOnly ?? false;
-					
-				document.getElementById(
-					"profileName"
-				).value =
-					data.profileName || "";
-	
-				renderGroups();
-	
-				alert(
-					"Profile imported successfully."
-				);
-	
 			} catch {
 	
 				alert(
