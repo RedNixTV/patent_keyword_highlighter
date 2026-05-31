@@ -357,8 +357,10 @@ patent-highlighter/
 ├── manifest.json
 ├── popup.html
 ├── popup.js
-├── constants.js
 ├── content.js
+├── constants.js
+├── storage.js
+├── profiles.js
 ├── style.css
 ├── README.md
 ├── CHANGELOG.md
@@ -369,6 +371,26 @@ patent-highlighter/
 ## Architecture Philosophy
 
 The project intentionally separates responsibilities.
+
+### Separation of Concerns
+
+The extension follows a modular architecture:
+
+constants.js
+    Configuration and versioning
+
+storage.js
+    Storage persistence and migrations
+
+profiles.js
+    Profile management and import/export
+
+popup.js
+    User interface
+
+content.js
+    Page analysis and highlighting
+
 
 ### manifest.json
 
@@ -403,28 +425,70 @@ Current profile version
 
 No UI or storage logic.
 
-### popup.js
+### storage.js
+
 Current Structure
-├── runMigrations()
+
+├── loadGroups()
 ├── saveGroups()
-├── loadProfiles()
+├── loadSettings()
+├── saveSettings()
+└── runMigrations()
+
+Responsible for:
+
+* Chrome storage access
+* Settings persistence
+* Group persistence
+* Storage migrations
+
+No UI logic.
+
+### profiles.js
+
+Current Structure
+
+├── createProfileData()
+├── createProfileBlob()
+├── createProfileFileName()
+├── parseProfileFile()
+├── validateProfile()
+├── migrateProfile()
+├── loadAllProfiles()
+├── saveAllProfiles()
+├── loadProfile()
 ├── saveProfile()
 ├── importProfile()
-├── exportProfile()
+
+Responsible for:
+
+* Profile creation
+* Profile validation
+* Profile migration
+* Profile import
+* Profile export utilities
+* Profile persistence
+
+No UI logic.
+
+### popup.js
+Current Structure
+
 ├── renderGroups()
-├── event listeners
-└── storage logic
+├── createPresetButtons()
+├── import/export handlers
+├── save/reset handlers
+└── event listeners
 
 Responsible for:
 
 User interaction
-State management
-Chrome storage
-Messaging
-Rendering popup UI
-Version migrations
+Popup rendering
+UI state updates
+Chrome message dispatching
 
 No page traversal logic.
+No profile validation logic.
 
 ### content.js
 
