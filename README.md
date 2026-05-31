@@ -385,8 +385,28 @@ Responsible for:
 * Buttons
 * Form controls
 
+### constants.js
+
+Current Structure
+
+├── DEFAULT_GROUPS
+├── PRESET_COLORS
+├── STORAGE_VERSIONS
+└── PROFILE_VERSION
+
+Responsible for:
+
+Default group definitions
+Preset color definitions
+Storage version definitions
+Current profile version
+
+No UI or storage logic.
+
 ### popup.js
 Current Structure
+├── runMigrations()
+├── saveGroups()
 ├── loadProfiles()
 ├── saveProfile()
 ├── importProfile()
@@ -397,11 +417,12 @@ Current Structure
 
 Responsible for:
 
-* User interaction
-* State management
-* Chrome storage
-* Messaging
-* Rendering popup UI
+User interaction
+State management
+Chrome storage
+Messaging
+Rendering popup UI
+Version migrations
 
 No page traversal logic.
 

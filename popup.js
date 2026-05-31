@@ -5,16 +5,18 @@ import {
   STORAGE_VERSIONS
 } from "./constants.js";
 
+import {
+    loadGroups,
+    saveGroups,
+    loadSettings,
+    saveSettings
+} from "./storage.js";
+
 const STORAGE_VERSION = PROFILE_VERSION;
     
 document.addEventListener("DOMContentLoaded", async () => {
 
-    const settings =
-		await chrome.storage.local.get([
-			"autoHighlight",
-			"wholeWordOnly",
-			"profileName"
-		]);
+    const settings = await loadSettings();
 	
 	if (settings.autoHighlight === undefined) {
 	
@@ -171,23 +173,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const saved =
         await chrome.storage.local.get("groups");
 
-    let groups = (saved.groups || DEFAULT_GROUPS).map(group => ({
-
-		enabled: true,
-		collapsed: false,
-	
-		...group
-	}));
+    let groups = await loadGroups();
 
     // -----------------------------------
     // RENDER GROUPS
     // -----------------------------------
 	let draggedGroupId = null;
-	async function saveGroups() {
-		await chrome.storage.local.set({
-			groups,
-			storageVersion: STORAGE_VERSION
-		});
+	async function persistGroups() {
+		await saveGroups(groups);
 	}
 	
 	function createPresetButtons(selectedColor) {
@@ -272,14 +265,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 								!group.collapsed;
 					
 							renderGroups();
-							saveGroups();
+							persistGroups();
 						});
 				wrapper.querySelector(".group-enabled")
 						.addEventListener("change", (e) => {
 					
 							group.enabled =
 								e.target.checked;
-							saveGroups();
+							persistGroups();
 						});
 				wrapper.addEventListener("dragstart", () => {
 					draggedGroupId =
@@ -311,7 +304,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 					groups.splice(targetIndex, 0, draggedGroup);
 				
 					renderGroups();
-					saveGroups();
+					persistGroups();
 				});
             // -----------------------------
             // LABEL
@@ -322,7 +315,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     group.label =
                         e.target.value;
-                    saveGroups();
+                    persistGroups();
                 });
 
             // -----------------------------
@@ -337,7 +330,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             .split(",")
                             .map(k => k.trim())
                             .filter(Boolean);
-                    saveGroups();
+                    persistGroups();
                 });
 
             // -----------------------------
@@ -349,7 +342,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     group.color =
                         e.target.value;
-                    saveGroups();
+                    persistGroups();
                 });
                 
             wrapper.querySelectorAll(".preset-btn")
@@ -370,7 +363,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 						wrapper.querySelector(".group-color").value =
 							color;
 			
-						saveGroups();
+						persistGroups();
 					});
 				});
 
@@ -390,7 +383,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         groups.filter(g => g.id !== group.id);
 
                     renderGroups();
-                    saveGroups();
+                    persistGroups();
                 });
 
             groupsContainer.appendChild(wrapper);
@@ -417,7 +410,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             renderGroups();
-            saveGroups();
+            persistGroups();
         });
 
     // -----------------------------------
@@ -469,15 +462,17 @@ document.addEventListener("DOMContentLoaded", async () => {
             ...group,
             id: crypto.randomUUID()
         }));
-
-        await chrome.storage.local.set({
-            groups,
-            storageVersion:
-					STORAGE_VERSION,
-            autoHighlight: true,
-            wholeWordOnly: false,
-            profileName: ""
-        });
+        
+        await saveGroups(groups);
+        
+        await saveSettings({
+		
+			autoHighlight: true,
+		
+			wholeWordOnly: false,
+		
+			profileName: ""
+		});
 
         document.getElementById(
             "autoHighlight"
