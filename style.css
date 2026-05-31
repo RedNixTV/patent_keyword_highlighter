@@ -1,48 +1,3 @@
-.group-block {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-}
-
-.group-label {
-    width: 100%;
-    margin-bottom: 8px;
-    padding: 5px;
-}
-
-.group-keywords {
-    width: 100%;
-    height: 70px;
-    margin-bottom: 10px;
-    resize: vertical;
-}
-
-.color-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-
-.delete-group-btn {
-    background: #cc4444;
-    color: white;
-    border: none;
-}
-
-.group-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-
-.collapse-btn {
-    width: 28px;
-    padding: 0;
-}
-
 body {
     width: 340px;
     font-family: Arial;
@@ -60,33 +15,15 @@ textarea {
     resize: vertical;
 }
 
-.color-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.preset-btn {
-    width: 22px;
-    height: 22px;
-    border: 1px solid #555;
-    cursor: pointer;
-    padding: 0;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    cursor: pointer;
-}
-
 .group-block {
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 6px;
+}
+
+.group-block.dragging {
+    opacity: 0.5;
 }
 
 .group-label {
@@ -102,12 +39,6 @@ button {
     resize: vertical;
 }
 
-.delete-group-btn {
-    background: #cc4444;
-    color: white;
-    border: none;
-}
-
 .group-header {
     display: flex;
     align-items: center;
@@ -115,17 +46,42 @@ button {
     margin-bottom: 8px;
 }
 
+.color-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.delete-group-btn {
+    background: #cc4444;
+    color: white;
+    border: none;
+}
+
 .collapse-btn {
     width: 28px;
     padding: 0;
 }
 
-.group-block.dragging {
-    opacity: 0.5;
+.preset-btn {
+    width: 22px;
+    height: 22px;
+    border: 1px solid #555;
+    cursor: pointer;
+    padding: 0;
 }
+
 .active-preset {
     outline: 3px solid black;
     transform: scale(1.15);
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    cursor: pointer;
 }
 
 .top-bar {
@@ -139,6 +95,7 @@ button {
     align-items: center;
     gap: 8px;
 }
+
 #resetBtn {
     width: auto;
     margin-top: 0;
@@ -152,6 +109,7 @@ button {
 
     font-weight: bold;
 }
+
 .switch {
     position: relative;
     display: inline-block;
@@ -199,10 +157,4 @@ button {
 
 .switch input:checked + .slider:before {
     transform: translateX(14px);
-}
-
-.toggle-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
