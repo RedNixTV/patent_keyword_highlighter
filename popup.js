@@ -15,7 +15,8 @@ import {
 
 import {
     exportProfile,
-    importProfile
+    importProfile,
+    createProfileData
 } from "./profiles.js";
 
 const STORAGE_VERSION = PROFILE_VERSION;
@@ -449,35 +450,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 	document.getElementById("exportBtn")
 		.addEventListener("click", async () => {
 	
-			const settings =
-				await chrome.storage.local.get([
-					"groups",
-					"autoHighlight",
-					"wholeWordOnly"
-				]);
+			const settings = await loadSettings();
 	
-			const exportData = {
-	
-				profileName:
-					document.getElementById(
-						"profileName"
-					).value.trim() ||
-					"Patent Search Profile",
-	
-				schemaVersion: STORAGE_VERSION,
-	
-				exportedAt:
-					new Date().toISOString(),
-	
-				groups:
-					settings.groups || [],
-	
-				autoHighlight:
-					settings.autoHighlight,
-	
-				wholeWordOnly:
-					settings.wholeWordOnly
-			};
+			const exportData =
+				createProfileData({
+					profileName:
+						document.getElementById(
+							"profileName"
+						).value.trim() ||
+						"Patent Search Profile",
+			
+					groups,
+			
+					autoHighlight:
+						settings.autoHighlight,
+			
+					wholeWordOnly:
+						settings.wholeWordOnly
+				});
 	
 			const blob =
 				new Blob(

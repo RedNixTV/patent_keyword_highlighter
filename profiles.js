@@ -2,6 +2,22 @@ import {
     PROFILE_VERSION
 } from "./constants.js";
 
+export function createProfileData({
+    profileName,
+    groups,
+    autoHighlight,
+    wholeWordOnly
+}) {
+    return {
+        profileName,
+        version: PROFILE_VERSION,
+        exportedAt: new Date().toISOString(),
+        groups,
+        autoHighlight,
+        wholeWordOnly
+    };
+}
+
 export function validateProfile(
     profile
 ) {
@@ -96,17 +112,15 @@ export async function exportProfile(
 export async function importProfile(
     profileData
 ) {
-    validateProfile(
-        profileData
-    );
+    validateProfile(profileData);
 
     const migrated =
-        migrateProfile(
-            profileData
-        );
+        migrateProfile(profileData);
 
     await saveProfile(
         migrated.profileName,
         migrated
     );
+
+    return migrated;
 }
