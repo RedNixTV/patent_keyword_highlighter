@@ -153,3 +153,88 @@ export function setupPresetColorHandler({
             });
         });
 }
+
+export function createGroupHandlers({
+    groups,
+    setGroups,
+    refreshGroups,
+    persistGroups
+}) {
+
+    return {
+
+        onToggleCollapse:
+            (wrapper, group) => {
+
+                setupCollapseHandler({
+                    wrapper,
+                    group,
+                    refreshGroups,
+                    persistGroups
+                });
+            },
+
+        onToggleEnabled:
+            (wrapper, group) => {
+
+                setupEnabledHandler({
+                    wrapper,
+                    group,
+                    persistGroups
+                });
+            },
+
+        onLabelChange:
+            (wrapper, group) => {
+
+                setupLabelHandler({
+                    wrapper,
+                    group,
+                    persistGroups
+                });
+            },
+
+        onKeywordsChange:
+            (wrapper, group) => {
+
+                setupKeywordsHandler({
+                    wrapper,
+                    group,
+                    persistGroups
+                });
+            },
+
+        onColorChange:
+            (wrapper, group) => {
+
+                setupColorHandler({
+                    wrapper,
+                    group,
+                    persistGroups
+                });
+            },
+
+        onPresetColorChange:
+            (wrapper, group) => {
+
+                setupPresetColorHandler({
+                    wrapper,
+                    group,
+                    persistGroups
+                });
+            },
+
+        onDeleteGroup:
+            (wrapper, group) => {
+
+                setupDeleteHandler({
+                    wrapper,
+                    group,
+                    groups,
+                    setGroups,
+                    refreshGroups,
+                    persistGroups
+                });
+            }
+    };
+}

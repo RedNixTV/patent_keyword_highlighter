@@ -1,12 +1,12 @@
 {
   "profileName": "Roof estimation",
   "version": "1.1.0",
-  "exportedAt": "2026-05-31T15:39:55.899Z",
+  "exportedAt": "2026-05-31T23:48:47.853Z",
   "groups": [
     {
+      "enabled": true,
       "collapsed": true,
       "color": "#ff0000",
-      "enabled": true,
       "id": "0ce876c2-07a6-4559-b302-e37dbb4ba2e0",
       "keywords": [
         "aerial",
@@ -29,9 +29,9 @@
       "label": "Image Acquisition / Data Source"
     },
     {
+      "enabled": true,
       "collapsed": true,
       "color": "#ff8800",
-      "enabled": true,
       "id": "bc071727-db68-4320-a692-f7fb536579ec",
       "keywords": [
         "vision",
@@ -55,9 +55,33 @@
       "label": "Computer Vision / AI"
     },
     {
+      "enabled": true,
+      "collapsed": true,
+      "color": "#d9b3ff",
+      "id": "6d46b87a-2b09-400c-a7a8-df19375bc72b",
+      "keywords": [
+        "slope",
+        "pitch",
+        "shape",
+        "configuration",
+        "design",
+        "architecture",
+        "irregular",
+        "multifacet",
+        "multiplane",
+        "intersect",
+        "ridge",
+        "valley",
+        "dormer",
+        "hip",
+        "gable"
+      ],
+      "label": "Roof Complexity Indicators"
+    },
+    {
+      "enabled": true,
       "collapsed": true,
       "color": "#dddddd",
-      "enabled": true,
       "id": "0f865b17-b8d6-4c32-a320-3416284bf1cb",
       "keywords": [
         "roof",
@@ -80,9 +104,9 @@
       "label": "Roof Geometry Extraction"
     },
     {
+      "enabled": true,
       "collapsed": true,
       "color": "#00aa00",
-      "enabled": true,
       "id": "cad1ea37-2146-4a22-904e-1992ab771567",
       "keywords": [
         "complex",
@@ -104,9 +128,9 @@
       "label": "Complexity / Classification"
     },
     {
-      "collapsed": true,
-      "color": "#0088ff",
       "enabled": true,
+      "collapsed": false,
+      "color": "#0088ff",
       "id": "24187039-7615-473e-ba45-fc1c74594dde",
       "keywords": [
         "waste",
@@ -126,30 +150,6 @@
         "report"
       ],
       "label": "Estimation / Waste / Business Output"
-    },
-    {
-      "collapsed": true,
-      "color": "#d9b3ff",
-      "enabled": true,
-      "id": "6d46b87a-2b09-400c-a7a8-df19375bc72b",
-      "keywords": [
-        "slope",
-        "pitch",
-        "shape",
-        "configuration",
-        "design",
-        "architecture",
-        "irregular",
-        "multifacet",
-        "multiplane",
-        "intersect",
-        "ridge",
-        "valley",
-        "dormer",
-        "hip",
-        "gable"
-      ],
-      "label": "Roof Complexity Indicators"
     }
   ],
   "autoHighlight": true,

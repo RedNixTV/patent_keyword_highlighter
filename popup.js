@@ -1,8 +1,6 @@
 import {
-  DEFAULT_GROUPS,
-  PRESET_COLORS,
-  PROFILE_VERSION,
-  STORAGE_VERSIONS
+    DEFAULT_GROUPS,
+    PROFILE_VERSION
 } from "./constants.js";
 
 import {
@@ -30,13 +28,7 @@ import {
 } from "./ui/dragDrop.js";
 
 import {
-    setupCollapseHandler,
-    setupDeleteHandler,
-    setupEnabledHandler,
-    setupLabelHandler,
-    setupKeywordsHandler,
-    setupColorHandler,
-    setupPresetColorHandler
+    createGroupHandlers
 } from "./ui/groupHandlers.js";
 
 const STORAGE_VERSION = PROFILE_VERSION;
@@ -145,18 +137,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 	}
 	
 	function refreshGroups() {
-		
+			
+			const handlers =
+				createGroupHandlers({
+					groups,
+					setGroups: (newGroups) => {
+						groups = newGroups;
+					},
+					refreshGroups,
+					persistGroups
+				});
+			
 			renderGroups({
-		
+			
 				groups,
-		
+			
 				groupsContainer,
-		
+			
 				persistGroups,
-		
+			
 				attachDragHandlers:
 					(wrapper, group) => {
-				
+			
 						setupDragHandlers({
 							wrapper,
 							group,
@@ -166,88 +168,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 							getDraggedGroupId: () =>
 								draggedGroupId,
 							setDraggedGroupId: (id) => {
-				
+			
 								draggedGroupId = id;
 							}
 						});
 					},
-		
-				onToggleCollapse:
-					(wrapper, group) => {
-				
-						setupCollapseHandler({
-							wrapper,
-							group,
-							refreshGroups,
-							persistGroups
-						});
-					},
-						
-				onToggleEnabled:
-					(wrapper, group) => {
-				
-						setupEnabledHandler({
-							wrapper,
-							group,
-							persistGroups
-						});
-					},
-		
-				onLabelChange:
-					(wrapper, group) => {
-				
-						setupLabelHandler({
-							wrapper,
-							group,
-							persistGroups
-						});
-					},
-		
-				onKeywordsChange:
-				(wrapper, group) => {
 			
-					setupKeywordsHandler({
-						wrapper,
-						group,
-						persistGroups
-					});
-				},
-		
-				onColorChange:
-					(wrapper, group) => {
-				
-						setupColorHandler({
-							wrapper,
-							group,
-							persistGroups
-						});
-					},
-		
-				onPresetColorChange:
-					(wrapper, group) => {
-				
-						setupPresetColorHandler({
-							wrapper,
-							group,
-							persistGroups
-						});
-					},
-		
-				onDeleteGroup:
-					(wrapper, group) => {
-				
-						setupDeleteHandler({
-							wrapper,
-							group,
-							groups,
-							setGroups: (newGroups) => {
-				
-								groups = newGroups;
-							},
-							refreshGroups,
-							persistGroups
-						});
-					}
+				...handlers
 			});
 		}
 
