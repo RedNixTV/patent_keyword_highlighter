@@ -21,6 +21,10 @@ import {
     createProfileFileName
 } from "./profiles.js";
 
+import {
+    renderGroups
+} from "./ui/groupRenderer.js";
+
 const STORAGE_VERSION = PROFILE_VERSION;
     
 document.addEventListener("DOMContentLoaded", async () => {
@@ -126,214 +130,154 @@ document.addEventListener("DOMContentLoaded", async () => {
 		await saveGroups(groups);
 	}
 	
-	function createPresetButtons(selectedColor) {
-	
-		return PRESET_COLORS
-			.map(color => `
-				<button
-					class="preset-btn
-						${selectedColor === color ? "active-preset" : ""}"
-					data-color="${color}"
-					style="background:${color};">
-				</button>
-			`)
-			.join("");
-	}
-
-    function renderGroups() {
-
-        groupsContainer.innerHTML = "";
-
-        groups.forEach(group => {
-
-            const wrapper =
-                document.createElement("div");
-
-            wrapper.className =
-                "group-block";
-            wrapper.draggable = true;
-
-            wrapper.innerHTML = `
-
-					<div class="group-header">
-				
-						<button class="collapse-btn">
-							${group.collapsed ? "▶" : "▼"}
-						</button>
-						
-						<input
-							type="checkbox"
-							class="group-enabled"
-							${group.enabled ? "checked" : ""}
-						>
-				
-						<input
-							type="text"
-							class="group-label"
-							value="${group.label}"
-						>
-				
-					</div>
-				
-					<div class="group-content"
-						 style="display: ${group.collapsed ? "none" : "block"};">
-				
-						<textarea class="group-keywords">${group.keywords.join(", ")}</textarea>
-				
-						<div class="color-row">
-						
-							<label>Color:</label>
-						
-							${createPresetButtons(group.color)}
-						
-							<input
-								type="color"
-								class="group-color"
-								value="${group.color}"
-							>
-						
-						</div>
-				
-						<button class="delete-group-btn">
-							Delete Group
-						</button>
-				
-					</div>
-				`;
-				
-				wrapper.querySelector(".collapse-btn")
-						.addEventListener("click", () => {
-					
-							group.collapsed =
-								!group.collapsed;
-					
-							renderGroups();
-							persistGroups();
-						});
-				wrapper.querySelector(".group-enabled")
-						.addEventListener("change", (e) => {
-					
-							group.enabled =
-								e.target.checked;
-							persistGroups();
-						});
-				wrapper.addEventListener("dragstart", () => {
-					draggedGroupId =
-						group.id;
-				
-					wrapper.classList.add("dragging");
-				});
-				wrapper.addEventListener("dragend", () => {
-					wrapper.classList.remove("dragging");
-				});
-				wrapper.addEventListener("dragover", (e) => {
-					e.preventDefault();
-				});
-				wrapper.addEventListener("drop", () => {
-				
-					if (draggedGroupId === group.id) {
-						return;
+	function refreshGroups() {
+		
+			renderGroups({
+		
+				groups,
+		
+				groupsContainer,
+		
+				persistGroups,
+		
+				attachDragHandlers:
+					(wrapper, group) => {
+		
+						// drag code still lives here for now
+					},
+		
+				onToggleCollapse:
+					(wrapper, group) => {
+		
+						wrapper
+							.querySelector(".collapse-btn")
+							.addEventListener("click", () => {
+		
+								group.collapsed =
+									!group.collapsed;
+		
+								refreshGroups();
+								persistGroups();
+							});
+					},
+		
+				onToggleEnabled:
+					(wrapper, group) => {
+		
+						wrapper
+							.querySelector(".group-enabled")
+							.addEventListener("change", e => {
+		
+								group.enabled =
+									e.target.checked;
+		
+								persistGroups();
+							});
+					},
+		
+				onLabelChange:
+					(wrapper, group) => {
+		
+						wrapper
+							.querySelector(".group-label")
+							.addEventListener("input", e => {
+		
+								group.label =
+									e.target.value;
+		
+								persistGroups();
+							});
+					},
+		
+				onKeywordsChange:
+					(wrapper, group) => {
+		
+						wrapper
+							.querySelector(".group-keywords")
+							.addEventListener("input", e => {
+		
+								group.keywords =
+									e.target.value
+										.split(",")
+										.map(k => k.trim())
+										.filter(Boolean);
+		
+								persistGroups();
+							});
+					},
+		
+				onColorChange:
+					(wrapper, group) => {
+		
+						wrapper
+							.querySelector(".group-color")
+							.addEventListener("input", e => {
+		
+								group.color =
+									e.target.value;
+		
+								persistGroups();
+							});
+					},
+		
+				onPresetColorChange:
+					(wrapper, group) => {
+		
+						wrapper
+							.querySelectorAll(".preset-btn")
+							.forEach(button => {
+		
+								button.addEventListener("click", () => {
+		
+									const color =
+										button.dataset.color;
+		
+									if (group.color === color) {
+										return;
+									}
+		
+									group.color =
+										color;
+		
+									wrapper
+										.querySelector(".group-color")
+										.value =
+										color;
+		
+									persistGroups();
+								});
+							});
+					},
+		
+				onDeleteGroup:
+					(wrapper, group) => {
+		
+						wrapper
+							.querySelector(".delete-group-btn")
+							.addEventListener("click", () => {
+		
+								if (groups.length === 1) {
+		
+									alert(
+										"At least one group is required."
+									);
+		
+									return;
+								}
+		
+								groups =
+									groups.filter(
+										g => g.id !== group.id
+									);
+		
+								refreshGroups();
+								persistGroups();
+							});
 					}
-				
-					const draggedIndex =
-						groups.findIndex(g => g.id === draggedGroupId);
-				
-					const targetIndex =
-						groups.findIndex(g => g.id === group.id);
-				
-					const [draggedGroup] =
-						groups.splice(draggedIndex, 1);
-				
-					groups.splice(targetIndex, 0, draggedGroup);
-				
-					renderGroups();
-					persistGroups();
-				});
-            // -----------------------------
-            // LABEL
-            // -----------------------------
+			});
+		}
 
-            wrapper.querySelector(".group-label")
-                .addEventListener("input", (e) => {
-
-                    group.label =
-                        e.target.value;
-                    persistGroups();
-                });
-
-            // -----------------------------
-            // KEYWORDS
-            // -----------------------------
-
-            wrapper.querySelector(".group-keywords")
-                .addEventListener("input", (e) => {
-
-                    group.keywords =
-                        e.target.value
-                            .split(",")
-                            .map(k => k.trim())
-                            .filter(Boolean);
-                    persistGroups();
-                });
-
-            // -----------------------------
-            // COLOR
-            // -----------------------------
-
-            wrapper.querySelector(".group-color")
-                .addEventListener("input", (e) => {
-
-                    group.color =
-                        e.target.value;
-                    persistGroups();
-                });
-                
-            wrapper.querySelectorAll(".preset-btn")
-				.forEach(button => {
-			
-					button.addEventListener("click", () => {
-			
-						const color =
-							button.dataset.color;
-							
-						if (group.color === color) {
-							return;
-						}
-			
-						group.color =
-							color;
-			
-						wrapper.querySelector(".group-color").value =
-							color;
-			
-						persistGroups();
-					});
-				});
-
-            // -----------------------------
-            // DELETE GROUP
-            // -----------------------------
-
-            wrapper.querySelector(".delete-group-btn")
-                .addEventListener("click", () => {
-                	if (groups.length === 1) {
-
-						alert("At least one group is required.");
-			
-						return;
-					}
-                    groups =
-                        groups.filter(g => g.id !== group.id);
-
-                    renderGroups();
-                    persistGroups();
-                });
-
-            groupsContainer.appendChild(wrapper);
-        });
-    }
-
-    renderGroups();
+    refreshGroups();
 
     // -----------------------------------
     // ADD GROUP
@@ -352,7 +296,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 enabled: true
             });
 
-            renderGroups();
+            refreshGroups();
             persistGroups();
         });
 
@@ -429,7 +373,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			"profileName"
 		).value = "";
 
-        renderGroups();
+        refreshGroups();
 
         const [tab] =
             await chrome.tabs.query({
@@ -564,7 +508,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 					).value =
 						profile.profileName || "";
 					
-					renderGroups();
+					refreshGroups();
 					
 					alert(
 						"Profile imported successfully."

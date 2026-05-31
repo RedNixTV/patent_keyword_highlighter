@@ -564,6 +564,23 @@ This avoids breaking page structure and improves compatibility with large patent
 
 ## Planned Features
 
+### UI Modularization
+
+Future refactors will move popup rendering into dedicated UI modules.
+
+Planned structure:
+
+ui/
+├── groupRenderer.js
+│   ├── createPresetButtons()
+│   ├── createGroupMarkup()
+│   └── renderGroups()
+
+└── dragDrop.js
+    └── attachDragHandlers()
+
+This will further separate rendering logic from application behavior and reduce popup.js complexity.
+
 ### Phrase Mode
 
 Support for multi word concepts such as:
