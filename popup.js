@@ -194,6 +194,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 		});
 	}
 	
+	function createPresetButtons(selectedColor) {
+	
+		return PRESET_COLORS
+			.map(color => `
+				<button
+					class="preset-btn
+						${selectedColor === color ? "active-preset" : ""}"
+					data-color="${color}"
+					style="background:${color};">
+				</button>
+			`)
+			.join("");
+	}
+
     function renderGroups() {
 
         groupsContainer.innerHTML = "";
@@ -235,78 +249,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 						<textarea class="group-keywords">${group.keywords.join(", ")}</textarea>
 				
 						<div class="color-row">
-
+						
 							<label>Color:</label>
 						
-							<button
-								class="preset-btn"
-								${group.color === "#ff0000" ? "active-preset" : ""}"
-								data-color="#ff0000"
-								style="background:#ff0000;">
-							</button>
-						
-							<button
-								class="preset-btn"
-								${group.color === "#ff8800" ? "active-preset" : ""}"
-								data-color="#ff8800"
-								style="background:#ff8800;">
-							</button>
-						
-							<button
-								class="preset-btn"
-								${group.color === "#dddddd" ? "active-preset" : ""}"
-								data-color="#dddddd"
-								style="background:#dddddd;">
-							</button>
-						
-							<button
-								class="preset-btn"
-								${group.color === "#00aa00" ? "active-preset" : ""}"
-								data-color="#00aa00"
-								style="background:#00aa00;">
-							</button>
-						
-							<button
-								class="preset-btn"
-								${group.color === "#0088ff" ? "active-preset" : ""}"
-								data-color="#0088ff"
-								style="background:#0088ff;">
-							</button>
-						
-							<button
-								class="preset-btn"
-								${group.color === "#d9b3ff" ? "active-preset" : ""}"
-								data-color="#d9b3ff"
-								style="background:#d9b3ff;">
-							</button>
-							
-							<button
-								class="preset-btn"
-								${group.color === "#00cccc" ? "active-preset" : ""}
-								data-color="#00cccc"
-								style="background:#00cccc;">
-							</button>
-							
-							<button
-								class="preset-btn"
-								${group.color === "#ff66cc" ? "active-preset" : ""}
-								data-color="#ff66cc"
-								style="background:#ff66cc;">
-							</button>
-							
-							<button
-								class="preset-btn"
-								${group.color === "#99e6ff" ? "active-preset" : ""}
-								data-color="#99e6ff"
-								style="background:#99e6ff;">
-							</button>
-							
-							<button
-								class="preset-btn"
-								${group.color === "#ffcc99" ? "active-preset" : ""}
-								data-color="#ffcc99"
-								style="background:#ffcc99;">
-							</button>
+							${createPresetButtons(group.color)}
 						
 							<input
 								type="color"
