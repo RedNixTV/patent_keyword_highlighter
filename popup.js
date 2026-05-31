@@ -511,4 +511,158 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         );
     });
+    
+    // -----------------------------------
+	// EXPORT PROFILE
+	// -----------------------------------
+	
+	document.getElementById("exportBtn")
+		.addEventListener("click", async () => {
+	
+			const settings =
+				await chrome.storage.local.get([
+					"groups",
+					"autoHighlight",
+					"wholeWordOnly"
+				]);
+	
+			const exportData = {
+	
+				profileName:
+					"Patent Search Profile",
+	
+				version: "1.2.0",
+	
+				exportedAt:
+					new Date().toISOString(),
+	
+				groups:
+					settings.groups || [],
+	
+				autoHighlight:
+					settings.autoHighlight,
+	
+				wholeWordOnly:
+					settings.wholeWordOnly
+			};
+	
+			const blob =
+				new Blob(
+					[
+						JSON.stringify(
+							exportData,
+							null,
+							2
+						)
+					],
+					{
+						type:
+							"application/json"
+					}
+				);
+	
+			const url =
+				URL.createObjectURL(blob);
+	
+			const a =
+				document.createElement("a");
+	
+			a.href = url;
+	
+			a.download =
+				`${exportData.profileName}.json`;
+	
+			a.click();
+	
+			URL.revokeObjectURL(url);
+		});
+	
+	document.getElementById("importBtn")
+    .addEventListener("click", () => {
+
+        document
+            .getElementById("importFile")
+            .click();
+    });
+    
+    // -----------------------------------
+	// IMPORT PROFILE
+	// -----------------------------------
+	
+	document.getElementById("importFile")
+		.addEventListener("change", async (e) => {
+	
+			const file =
+				e.target.files[0];
+	
+			if (!file) {
+				return;
+			}
+	
+			const text =
+				await file.text();
+	
+			try {
+	
+				const data =
+					JSON.parse(text);
+	
+				if (!Array.isArray(data.groups)) {
+	
+					alert(
+						"Invalid profile file."
+					);
+	
+					return;
+				}
+	
+				groups =
+					data.groups.map(group => ({
+	
+						enabled: true,
+						collapsed: false,
+	
+						...group,
+	
+						id:
+							group.id ||
+							crypto.randomUUID()
+					}));
+	
+				await chrome.storage.local.set({
+	
+					groups,
+	
+					autoHighlight:
+						data.autoHighlight ?? true,
+	
+					wholeWordOnly:
+						data.wholeWordOnly ?? false
+				});
+	
+				document.getElementById(
+					"autoHighlight"
+				).checked =
+					data.autoHighlight ?? true;
+	
+				document.getElementById(
+					"wholeWordOnly"
+				).checked =
+					data.wholeWordOnly ?? false;
+	
+				renderGroups();
+	
+				alert(
+					"Profile imported successfully."
+				);
+	
+			} catch {
+	
+				alert(
+					"Unable to import profile."
+				);
+			}
+	
+			e.target.value = "";
+		});
 });
