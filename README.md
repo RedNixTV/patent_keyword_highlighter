@@ -357,6 +357,7 @@ patent-highlighter/
 ├── manifest.json
 ├── popup.html
 ├── popup.js
+├── constants.js
 ├── content.js
 ├── style.css
 ├── README.md
@@ -385,6 +386,15 @@ Responsible for:
 * Form controls
 
 ### popup.js
+Current Structure
+├── DEFAULT_GROUPS
+├── loadProfiles()
+├── saveProfile()
+├── importProfile()
+├── exportProfile()
+├── renderGroups()
+├── event listeners
+└── storage logic
 
 Responsible for:
 

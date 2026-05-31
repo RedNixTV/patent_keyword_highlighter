@@ -1,3 +1,8 @@
+import {
+  DEFAULT_GROUPS,
+  PRESET_COLORS
+} from "./constants.js";
+
 const STORAGE_VERSIONS = {
     V1_0_0: "1.0.0",
     V1_1_0: "1.1.0"
@@ -115,36 +120,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 		
     const groupsContainer =
         document.getElementById("groupsContainer");
-
-    const DEFAULT_GROUPS = [
-
-        {
-            id: crypto.randomUUID(),
-            label: "Base Device",
-            color: "#ff0000",
-            keywords: [],
-            collapsed: false,
-            enabled: true
-        },
-
-        {
-            id: crypto.randomUUID(),
-            label: "Function / Business Logic",
-            color: "#00aa00",
-            keywords: [],
-            collapsed: false,
-            enabled: true
-        },
-
-        {
-            id: crypto.randomUUID(),
-            label: "Technical",
-            color: "#d9b3ff",
-            keywords: [],
-            collapsed: false,
-            enabled: true
-        }
-    ];
     
     async function runMigrations() {
 	
