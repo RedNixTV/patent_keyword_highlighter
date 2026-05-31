@@ -16,7 +16,8 @@ import {
 import {
     exportProfile,
     importProfile,
-    createProfileData
+    createProfileData,
+    parseProfileFile
 } from "./profiles.js";
 
 const STORAGE_VERSION = PROFILE_VERSION;

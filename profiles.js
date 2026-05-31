@@ -117,10 +117,45 @@ export async function importProfile(
     const migrated =
         migrateProfile(profileData);
 
+    migrated.groups =
+        normalizeGroups(
+            migrated.groups
+        );
+
     await saveProfile(
         migrated.profileName,
         migrated
     );
 
     return migrated;
+}
+
+function normalizeGroups(
+    groups
+) {
+    return groups.map(group => ({
+        id:
+            group.id ||
+            crypto.randomUUID(),
+
+        enabled:
+            group.enabled ?? true,
+
+        collapsed:
+            group.collapsed ?? false,
+
+        phraseMode:
+            group.phraseMode ?? false,
+
+        ...group
+    }));
+}
+
+export async function parseProfileFile(
+    file
+) {
+    const text =
+        await file.text();
+
+    return JSON.parse(text);
 }
