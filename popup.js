@@ -29,6 +29,10 @@ import {
     attachDragHandlers as setupDragHandlers
 } from "./ui/dragDrop.js";
 
+import {
+    setupCollapseHandler
+} from "./ui/groupHandlers.js";
+
 const STORAGE_VERSION = PROFILE_VERSION;
     
 document.addEventListener("DOMContentLoaded", async () => {
@@ -164,19 +168,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 		
 				onToggleCollapse:
 					(wrapper, group) => {
-		
-						wrapper
-							.querySelector(".collapse-btn")
-							.addEventListener("click", () => {
-		
-								group.collapsed =
-									!group.collapsed;
-		
-								refreshGroups();
-								persistGroups();
-							});
+				
+						setupCollapseHandler({
+							wrapper,
+							group,
+							refreshGroups,
+							persistGroups
+						});
 					},
-		
+						
 				onToggleEnabled:
 					(wrapper, group) => {
 		
