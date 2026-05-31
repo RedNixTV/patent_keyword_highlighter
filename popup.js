@@ -31,7 +31,12 @@ import {
 
 import {
     setupCollapseHandler,
-    setupDeleteHandler
+    setupDeleteHandler,
+    setupEnabledHandler,
+    setupLabelHandler,
+    setupKeywordsHandler,
+    setupColorHandler,
+    setupPresetColorHandler
 } from "./ui/groupHandlers.js";
 
 const STORAGE_VERSION = PROFILE_VERSION;
@@ -180,90 +185,52 @@ document.addEventListener("DOMContentLoaded", async () => {
 						
 				onToggleEnabled:
 					(wrapper, group) => {
-		
-						wrapper
-							.querySelector(".group-enabled")
-							.addEventListener("change", e => {
-		
-								group.enabled =
-									e.target.checked;
-		
-								persistGroups();
-							});
+				
+						setupEnabledHandler({
+							wrapper,
+							group,
+							persistGroups
+						});
 					},
 		
 				onLabelChange:
 					(wrapper, group) => {
-		
-						wrapper
-							.querySelector(".group-label")
-							.addEventListener("input", e => {
-		
-								group.label =
-									e.target.value;
-		
-								persistGroups();
-							});
+				
+						setupLabelHandler({
+							wrapper,
+							group,
+							persistGroups
+						});
 					},
 		
 				onKeywordsChange:
-					(wrapper, group) => {
-		
-						wrapper
-							.querySelector(".group-keywords")
-							.addEventListener("input", e => {
-		
-								group.keywords =
-									e.target.value
-										.split(",")
-										.map(k => k.trim())
-										.filter(Boolean);
-		
-								persistGroups();
-							});
-					},
+				(wrapper, group) => {
+			
+					setupKeywordsHandler({
+						wrapper,
+						group,
+						persistGroups
+					});
+				},
 		
 				onColorChange:
 					(wrapper, group) => {
-		
-						wrapper
-							.querySelector(".group-color")
-							.addEventListener("input", e => {
-		
-								group.color =
-									e.target.value;
-		
-								persistGroups();
-							});
+				
+						setupColorHandler({
+							wrapper,
+							group,
+							persistGroups
+						});
 					},
 		
 				onPresetColorChange:
 					(wrapper, group) => {
-		
-						wrapper
-							.querySelectorAll(".preset-btn")
-							.forEach(button => {
-		
-								button.addEventListener("click", () => {
-		
-									const color =
-										button.dataset.color;
-		
-									if (group.color === color) {
-										return;
-									}
-		
-									group.color =
-										color;
-		
-									wrapper
-										.querySelector(".group-color")
-										.value =
-										color;
-		
-									persistGroups();
-								});
-							});
+				
+						setupPresetColorHandler({
+							wrapper,
+							group,
+							persistGroups
+						});
 					},
 		
 				onDeleteGroup:
