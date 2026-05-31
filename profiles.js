@@ -109,6 +109,38 @@ export async function exportProfile(
     };
 }
 
+export function createProfileBlob(
+    profile
+) {
+    return new Blob(
+        [
+            JSON.stringify(
+                profile,
+                null,
+                2
+            )
+        ],
+        {
+            type:
+                "application/json"
+        }
+    );
+}
+
+export function createProfileFileName(
+    profileName
+) {
+    const safeFileName =
+        profileName
+            .replace(
+                /[<>:"/\\|?*]/g,
+                ""
+            )
+            .trim();
+
+    return `${safeFileName}.json`;
+}
+
 export async function importProfile(
     profileData
 ) {

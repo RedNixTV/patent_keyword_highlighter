@@ -16,7 +16,9 @@ import {
 import {
     importProfile,
     createProfileData,
-    parseProfileFile
+    parseProfileFile,
+    createProfileBlob,
+    createProfileFileName
 } from "./profiles.js";
 
 const STORAGE_VERSION = PROFILE_VERSION;
@@ -468,20 +470,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 					wholeWordOnly:
 						settings.wholeWordOnly
 				});
-	
+				
 			const blob =
-				new Blob(
-					[
-						JSON.stringify(
-							exportData,
-							null,
-							2
-						)
-					],
-					{
-						type:
-							"application/json"
-					}
+				createProfileBlob(
+					exportData
 				);
 	
 			const url =
@@ -492,13 +484,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 	
 			a.href = url;
 	
-			const safeFileName =
-				exportData.profileName
-					.replace(/[<>:"/\\|?*]/g, "")
-					.trim();
-			
 			a.download =
-				`${safeFileName}.json`;
+				createProfileFileName(
+					exportData.profileName
+				);
 	
 			a.click();
 	
