@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const settings =
 		await chrome.storage.local.get([
 			"autoHighlight",
-			"wholeWordOnly"
+			"wholeWordOnly",
+			"profileName"
 		]);
 	
 	if (settings.autoHighlight === undefined) {
@@ -98,6 +99,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 	updateLabel();
 	
 	toggle.addEventListener("change", updateLabel);
+	
+	document.getElementById(
+		"profileName"
+	).value =
+		settings.profileName || "";
 		
     const groupsContainer =
         document.getElementById("groupsContainer");
@@ -449,8 +455,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     .addEventListener("click", async () => {
 
         await chrome.storage.local.set({
-            groups
-        });
+		
+			groups,
+		
+			profileName:
+				document.getElementById(
+					"profileName"
+				).value.trim()
+		});
 
         const [tab] =
             await chrome.tabs.query({
@@ -485,7 +497,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         await chrome.storage.local.set({
             groups,
             autoHighlight: true,
-            wholeWordOnly: false
+            wholeWordOnly: false,
+            profileName: ""
         });
 
         document.getElementById(
@@ -495,6 +508,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById(
 			"wholeWordOnly"
 		).checked = false;
+		
+		document.getElementById(
+			"profileName"
+		).value = "";
 
         renderGroups();
 
@@ -529,9 +546,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 			const exportData = {
 	
 				profileName:
+					document.getElementById(
+						"profileName"
+					).value.trim() ||
 					"Patent Search Profile",
 	
-				version: "1.2.0",
+				version: "1.1.0",
 	
 				exportedAt:
 					new Date().toISOString(),
@@ -569,8 +589,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 	
 			a.href = url;
 	
+			const safeFileName =
+				exportData.profileName
+					.replace(/[<>:"/\\|?*]/g, "")
+					.trim();
+			
 			a.download =
-				`${exportData.profileName}.json`;
+				`${safeFileName}.json`;
 	
 			a.click();
 	
@@ -632,6 +657,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 				await chrome.storage.local.set({
 	
 					groups,
+					
+					profileName:
+							data.profileName || "",
 	
 					autoHighlight:
 						data.autoHighlight ?? true,
@@ -649,6 +677,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 					"wholeWordOnly"
 				).checked =
 					data.wholeWordOnly ?? false;
+					
+				document.getElementById(
+					"profileName"
+				).value =
+					data.profileName || "";
 	
 				renderGroups();
 	

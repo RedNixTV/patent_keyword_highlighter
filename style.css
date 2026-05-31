@@ -158,3 +158,11 @@ button {
 .switch input:checked + .slider:before {
     transform: translateX(14px);
 }
+
+#profileName {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+}

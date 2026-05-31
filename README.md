@@ -45,11 +45,21 @@ Install extension
 ↓
 Active ON
 
+Select or create profile
+↓
 Enter keywords
 ↓
 Save
 ↓
 Highlight
+
+Export profile
+↓
+Share or back up
+
+Import profile
+↓
+Restore settings
 
 Toggle Match Whole Word Only
 ↓
@@ -210,6 +220,86 @@ Reset performs the following actions:
 After Reset, users can immediately begin entering new keywords.
 
 ---
+## Search Profiles
+
+Patent Highlighter supports named search profiles that can be saved, exported, imported, and reused across different inventions.
+
+### Creating a Profile
+
+Enter a profile name such as:
+
+```text
+Roof Estimation
+Medical Device
+Athletic Footwear
+AI Systems
+Construction Materials
+```
+
+Then configure keyword groups and click Save.
+
+### Export Profile
+
+Export saves all profile settings to a JSON file, including:
+
+* Profile name
+* Keyword groups
+* Colors
+* Labels
+* Auto Highlight setting
+* Match Whole Word Only setting
+
+Example:
+
+```text
+Roof Estimation.json
+```
+
+Example JSON:
+
+```json
+{
+  "profileName": "Roof Estimation",
+  "version": "1.2.0",
+  "groups": [...],
+  "autoHighlight": true,
+  "wholeWordOnly": false
+}
+```
+
+### Import Profile
+
+Import restores a previously exported profile.
+
+Imported settings include:
+
+* Profile name
+* Keyword groups
+* Group colors
+* Group labels
+* Auto Highlight setting
+* Match Whole Word Only setting
+
+This allows researchers to quickly switch between invention specific search environments.
+
+### Example Workflow
+
+```text
+Import Roof Estimation.json
+↓
+Search roofing inventions
+
+Import Medical Device.json
+↓
+Search medical inventions
+
+Import AI Systems.json
+↓
+Search software inventions
+```
+
+Profiles can also be shared with teammates, researchers, and trainees.
+--
 
 ## Project Structure
 
@@ -274,20 +364,23 @@ No UI logic.
 
 ## Current Features
 
-* Dynamic groups
-* Persistent storage
-* Active toggle
-* Match whole word only
-* Save workflow
-* Reset workflow
-* Collapse / expand
-* Enable / disable groups
-* Drag reorder
-* Preset colors
-* Custom colors
-* Regex caching
-* DOM safe highlighting
-* Delete protection
+Dynamic groups
+Named search profiles
+Profile import
+Profile export
+Persistent storage
+Active toggle
+Match whole word only
+Save workflow
+Reset workflow
+Collapse / expand
+Enable / disable groups
+Drag reorder
+Preset colors
+Custom colors
+Regex caching
+DOM safe highlighting
+Delete protection
 
 ---
 
