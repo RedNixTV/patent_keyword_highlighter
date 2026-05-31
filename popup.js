@@ -1,15 +1,11 @@
 import {
   DEFAULT_GROUPS,
-  PRESET_COLORS
+  PRESET_COLORS,
+  PROFILE_VERSION,
+  STORAGE_VERSIONS
 } from "./constants.js";
 
-const STORAGE_VERSIONS = {
-    V1_0_0: "1.0.0",
-    V1_1_0: "1.1.0"
-};
-
-const STORAGE_VERSION =
-    STORAGE_VERSIONS.V1_1_0;
+const STORAGE_VERSION = PROFILE_VERSION;
     
 document.addEventListener("DOMContentLoaded", async () => {
 

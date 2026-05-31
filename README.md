@@ -387,7 +387,6 @@ Responsible for:
 
 ### popup.js
 Current Structure
-├── DEFAULT_GROUPS
 ├── loadProfiles()
 ├── saveProfile()
 ├── importProfile()
