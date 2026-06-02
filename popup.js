@@ -1,6 +1,5 @@
 import {
-    DEFAULT_GROUPS,
-    PROFILE_VERSION
+    DEFAULT_GROUPS
 } from "./constants.js";
 
 import {
@@ -35,8 +34,6 @@ import {
     initializeSettings,
     saveProfileName
 } from "./settings.js";
-
-const STORAGE_VERSION = PROFILE_VERSION;
     
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -135,14 +132,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("saveBtn")
     .addEventListener("click", async () => {
 
-        await chrome.storage.local.set({
+        await saveGroups(groups);
 		
-			groups,
-			
-			storageVersion:
-				STORAGE_VERSION,
-		
-			profileName: saveProfileName()
+		await saveSettings({
+			profileName:
+				saveProfileName()
 		});
 
         const [tab] =
@@ -299,12 +293,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 					groups =
 						profile.groups;
 					
-					await chrome.storage.local.set({
+					await saveGroups(groups);
 					
-						groups,
-					
-						storageVersion:
-							STORAGE_VERSION,
+					await saveSettings({
 					
 						profileName:
 							profile.profileName || "",
