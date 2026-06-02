@@ -11,12 +11,9 @@ import {
 } from "./storage.js";
 
 import {
-    importProfile,
-    createProfileData,
-    parseProfileFile,
-    createProfileBlob,
-    createProfileFileName
-} from "./profiles.js";
+    setupExportHandler,
+    setupImportHandler
+} from "./importExport.js";
 
 import {
     renderGroups
@@ -105,6 +102,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 		}
 
     refreshGroups();
+    setupExportHandler({
+		getGroups: () => groups
+	});
+	
+	setupImportHandler({
+		setGroups: (newGroups) => {
+			groups = newGroups;
+		},
+		refreshGroups
+	});
 
     // -----------------------------------
     // ADD GROUP
@@ -200,129 +207,4 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
     });
     
-    // -----------------------------------
-	// EXPORT PROFILE
-	// -----------------------------------
-	
-	document.getElementById("exportBtn")
-		.addEventListener("click", async () => {
-	
-			const settings = await loadSettings();
-	
-			const exportData =
-				createProfileData({
-					profileName:
-						saveProfileName()||
-						"Patent Search Profile",
-			
-					groups,
-			
-					autoHighlight:
-						settings.autoHighlight,
-			
-					wholeWordOnly:
-						settings.wholeWordOnly
-				});
-				
-			const blob =
-				createProfileBlob(
-					exportData
-				);
-	
-			const url =
-				URL.createObjectURL(blob);
-	
-			const a =
-				document.createElement("a");
-	
-			a.href = url;
-	
-			a.download =
-				createProfileFileName(
-					exportData.profileName
-				);
-	
-			a.click();
-	
-			URL.revokeObjectURL(url);
-		});
-	
-	document.getElementById("importBtn")
-    .addEventListener("click", () => {
-
-        document
-            .getElementById("importFile")
-            .click();
-    });
-    
-    // -----------------------------------
-	// IMPORT PROFILE
-	// -----------------------------------
-	
-	document.getElementById("importFile")
-		.addEventListener("change", async (e) => {
-	
-			const file =
-				e.target.files[0];
-	
-			if (!file) {
-				return;
-			}
-
-	
-			try {
-	
-				const data =
-						await parseProfileFile(
-							file
-						);
-					
-					const profile =
-						await importProfile(
-							data
-						);
-					
-					groups =
-						profile.groups;
-					
-					await saveGroups(groups);
-					
-					await saveSettings({
-					
-						profileName:
-							profile.profileName || "",
-					
-						autoHighlight:
-							profile.autoHighlight ?? true,
-					
-						wholeWordOnly:
-							profile.wholeWordOnly ?? false
-					});
-					
-					applySettingsToUI({
-					
-						autoHighlight:
-							profile.autoHighlight ?? true,
-					
-						wholeWordOnly:
-							profile.wholeWordOnly ?? false,
-					
-						profileName:
-							profile.profileName || ""
-					});
-					
-					refreshGroups();
-					
-					alert(
-						"Profile imported successfully."
-					);
-			} catch {
-	
-				alert(
-					"Unable to import profile."
-				);
-			}
-	
-			e.target.value = "";
-		});
 });
