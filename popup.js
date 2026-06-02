@@ -32,7 +32,9 @@ import {
 
 import {
     initializeSettings,
-    saveProfileName
+    saveProfileName,
+    applySettingsToUI,
+    resetSettingsUI
 } from "./settings.js";
     
 document.addEventListener("DOMContentLoaded", async () => {
@@ -180,17 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			profileName: ""
 		});
 
-        document.getElementById(
-            "autoHighlight"
-        ).checked = true;
-        
-        document.getElementById(
-			"wholeWordOnly"
-		).checked = false;
-		
-		document.getElementById(
-			"profileName"
-		).value = "";
+        resetSettingsUI();
 
         refreshGroups();
 
@@ -307,20 +299,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 							profile.wholeWordOnly ?? false
 					});
 					
-					document.getElementById(
-						"autoHighlight"
-					).checked =
-						profile.autoHighlight ?? true;
+					applySettingsToUI({
 					
-					document.getElementById(
-						"wholeWordOnly"
-					).checked =
-						profile.wholeWordOnly ?? false;
+						autoHighlight:
+							profile.autoHighlight ?? true,
 					
-					document.getElementById(
-						"profileName"
-					).value =
-						profile.profileName || "";
+						wholeWordOnly:
+							profile.wholeWordOnly ?? false,
+					
+						profileName:
+							profile.profileName || ""
+					});
 					
 					refreshGroups();
 					

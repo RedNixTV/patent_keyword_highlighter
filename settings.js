@@ -111,3 +111,33 @@ export function saveProfileName() {
         .value
         .trim();
 }
+
+export function applySettingsToUI(settings) {
+
+    document.getElementById(
+        "autoHighlight"
+    ).checked =
+        settings.autoHighlight;
+
+    document.getElementById(
+        "wholeWordOnly"
+    ).checked =
+        settings.wholeWordOnly;
+
+    document.getElementById(
+        "profileName"
+    ).value =
+        settings.profileName;
+}
+
+export function resetSettingsUI() {
+
+    applySettingsToUI({
+
+        autoHighlight: true,
+
+        wholeWordOnly: false,
+
+        profileName: ""
+    });
+}
