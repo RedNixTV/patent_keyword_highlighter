@@ -362,6 +362,7 @@ patent-highlighter/
 ├── storage.js
 ├── profiles.js
 ├── settings.js
+├── importExport.js
 ├── style.css
 ├── README.md
 ├── CHANGELOG.md
@@ -393,6 +394,9 @@ profiles.js
     
 settings.js
     Settings UI management
+    
+importExport.js
+    Profile import/export event handling
 
 popup.js
     Application orchestration
@@ -515,13 +519,31 @@ Responsible for:
 No storage logic.
 No group management.
 
+### importExport.js
+
+Current Structure
+
+├── setupExportHandler()
+└── setupImportHandler()
+
+Responsible for:
+
+* Profile export workflow
+* Profile import workflow
+* Import/export button handlers
+* Import file processing
+* Profile UI updates after import
+
+No group rendering logic.
+No storage implementation.
+No drag and drop logic.
+
 ### popup.js
 
 Current Structure
 
 ├── group orchestration
 ├── save/reset handlers
-├── import/export handlers
 └── Chrome message dispatching
 
 Responsible for:
@@ -530,8 +552,6 @@ Responsible for:
 * Group lifecycle management
 * Save workflow
 * Reset workflow
-* Profile import
-* Profile export
 * Communication with content scripts
 
 No rendering logic.
