@@ -33,6 +33,11 @@ import {
     applySettingsToUI,
     resetSettingsUI
 } from "./settings.js";
+
+import {
+    setupSaveHandler,
+    setupResetHandler
+} from "./saveReset.js";
     
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -135,77 +140,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             persistGroups();
         });
 
-    // -----------------------------------
-    // HIGHLIGHT
-    // -----------------------------------
-
-    document.getElementById("saveBtn")
-    .addEventListener("click", async () => {
-
-        await saveGroups(groups);
-		
-		await saveSettings({
-			profileName:
-				saveProfileName()
+		setupSaveHandler({
+			getGroups: () => groups
 		});
-
-        const [tab] =
-            await chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            });
-
-        const enabled =
-			document.getElementById(
-				"autoHighlight"
-			).checked;
 		
-		chrome.tabs.sendMessage(
-			tab.id,
-			{
-				action:
-					enabled
-						? "refresh"
-						: "clear"
-			}
-		);
-    });
-    
-    document.getElementById("resetBtn")
-    .addEventListener("click", async () => {
-
-        groups = DEFAULT_GROUPS.map(group => ({
-            ...group,
-            id: crypto.randomUUID()
-        }));
-        
-        await saveGroups(groups);
-        
-        await saveSettings({
-		
-			autoHighlight: true,
-		
-			wholeWordOnly: false,
-		
-			profileName: ""
+		setupResetHandler({
+			setGroups: (newGroups) => {
+				groups = newGroups;
+			},
+			refreshGroups
 		});
-
-        resetSettingsUI();
-
-        refreshGroups();
-
-        const [tab] =
-            await chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            });
-
-        chrome.tabs.sendMessage(
-            tab.id,
-            {
-                action: "clear"
-            }
-        );
-    });
     
 });

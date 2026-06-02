@@ -363,6 +363,7 @@ patent-highlighter/
 ├── profiles.js
 ├── settings.js
 ├── importExport.js
+├── saveReset.js
 ├── style.css
 ├── README.md
 ├── CHANGELOG.md
@@ -538,13 +539,30 @@ No group rendering logic.
 No storage implementation.
 No drag and drop logic.
 
+### saveReset.js
+
+Current Structure
+
+├── setupSaveHandler()
+└── setupResetHandler()
+
+Responsible for:
+
+* Save button workflow
+* Reset button workflow
+* Chrome message dispatching
+* Settings reset behavior
+
+No rendering logic.
+No group event handling.
+No drag and drop logic.
+
 ### popup.js
 
 Current Structure
 
 ├── group orchestration
-├── save/reset handlers
-└── Chrome message dispatching
+└── application startup
 
 Responsible for:
 
