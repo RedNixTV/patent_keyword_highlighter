@@ -31,91 +31,18 @@ import {
     createGroupHandlers
 } from "./ui/groupHandlers.js";
 
+import {
+    initializeSettings,
+    saveProfileName
+} from "./settings.js";
+
 const STORAGE_VERSION = PROFILE_VERSION;
     
 document.addEventListener("DOMContentLoaded", async () => {
 
     const settings = await loadSettings();
-	
-	document.getElementById("autoHighlight").checked =
-		settings.autoHighlight;
-		
-	document
-		.getElementById("autoHighlight")
-		.addEventListener("change", async (e) => {
-	
-			const enabled =
-				e.target.checked;
-	
-			await chrome.storage.local.set({
-				autoHighlight: enabled
-			});
-	
-			const [tab] =
-				await chrome.tabs.query({
-					active: true,
-					currentWindow: true
-				});
-	
-			chrome.tabs.sendMessage(
-				tab.id,
-				{
-					action:
-						enabled
-							? "refresh"
-							: "clear"
-				}
-			);
-		});
-		
-		document.getElementById(
-			"wholeWordOnly"
-		).checked =
-			settings.wholeWordOnly;
-			
-	document
-		.getElementById("wholeWordOnly")
-		.addEventListener("change", async (e) => {
-	
-			await chrome.storage.local.set({
-				wholeWordOnly: e.target.checked
-			});
-	
-			const [tab] =
-				await chrome.tabs.query({
-					active: true,
-					currentWindow: true
-				});
-	
-			chrome.tabs.sendMessage(
-				tab.id,
-				{
-					action: "refresh"
-				}
-			);
-		});
-		
-	const toggle =
-		document.getElementById("autoHighlight");
-	
-	const label =
-		document.getElementById("toggleLabel");
-	
-	function updateLabel() {
-		label.textContent =
-			toggle.checked
-				? "Active"
-				: "Inactive";
-	}
-	
-	updateLabel();
-	
-	toggle.addEventListener("change", updateLabel);
-	
-	document.getElementById(
-		"profileName"
-	).value =
-		settings.profileName || "";
+    
+    initializeSettings(settings);
 		
     const groupsContainer =
         document.getElementById("groupsContainer");
@@ -215,10 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			storageVersion:
 				STORAGE_VERSION,
 		
-			profileName:
-				document.getElementById(
-					"profileName"
-				).value.trim()
+			profileName: saveProfileName()
 		});
 
         const [tab] =
@@ -302,9 +226,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			const exportData =
 				createProfileData({
 					profileName:
-						document.getElementById(
-							"profileName"
-						).value.trim() ||
+						saveProfileName()||
 						"Patent Search Profile",
 			
 					groups,
