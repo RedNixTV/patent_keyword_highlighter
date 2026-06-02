@@ -16,18 +16,6 @@ import {
 } from "./importExport.js";
 
 import {
-    renderGroups
-} from "./ui/groupRenderer.js";
-
-import {
-    attachDragHandlers as setupDragHandlers
-} from "./ui/dragDrop.js";
-
-import {
-    createGroupHandlers
-} from "./ui/groupHandlers.js";
-
-import {
     initializeSettings,
     saveProfileName,
     applySettingsToUI,
@@ -38,6 +26,10 @@ import {
     setupSaveHandler,
     setupResetHandler
 } from "./saveReset.js";
+
+import {
+    createGroupsManager
+} from "./ui/groupsManager.js";
     
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -53,102 +45,45 @@ document.addEventListener("DOMContentLoaded", async () => {
     // -----------------------------------
 
     await runMigrations();
-
-    let groups = await loadGroups();
-
-    // -----------------------------------
-    // RENDER GROUPS
-    // -----------------------------------
-	let draggedGroupId = null;
-	async function persistGroups() {
-		await saveGroups(groups);
-	}
-	
-	function refreshGroups() {
-			
-			const handlers =
-				createGroupHandlers({
-					groups,
-					setGroups: (newGroups) => {
-						groups = newGroups;
-					},
-					refreshGroups,
-					persistGroups
-				});
-			
-			renderGroups({
-			
-				groups,
-			
-				groupsContainer,
-			
-				persistGroups,
-			
-				attachDragHandlers:
-					(wrapper, group) => {
-			
-						setupDragHandlers({
-							wrapper,
-							group,
-							groups,
-							renderGroups: refreshGroups,
-							persistGroups,
-							getDraggedGroupId: () =>
-								draggedGroupId,
-							setDraggedGroupId: (id) => {
-			
-								draggedGroupId = id;
-							}
-						});
-					},
-			
-				...handlers
-			});
-		}
-
-    refreshGroups();
+    
+    const groupsManager =
+		await createGroupsManager({
+			groupsContainer
+		});
+    
     setupExportHandler({
-		getGroups: () => groups
+		getGroups:
+		groupsManager.getGroups
 	});
 	
 	setupImportHandler({
-		setGroups: (newGroups) => {
-			groups = newGroups;
-		},
-		refreshGroups,
-		persistGroups
-	});
-
-    // -----------------------------------
-    // ADD GROUP
-    // -----------------------------------
-
-    document.getElementById("addGroupBtn")
-        .addEventListener("click", () => {
-
-            groups.push({
-
-                id: crypto.randomUUID(),
-                label: "New Group",
-                color: "#ffff00",
-                keywords: [],
-                collapsed: false,
-                enabled: true
-            });
-
-            refreshGroups();
-            persistGroups();
-        });
-
-		setupSaveHandler({
-			getGroups: () => groups
-		});
+		setGroups:
+			groupsManager.setGroups,
 		
-		setupResetHandler({
-			setGroups: (newGroups) => {
-				groups = newGroups;
-			},
-			refreshGroups
+		refreshGroups:
+			groupsManager.refreshGroups,
+		
+		persistGroups:
+			groupsManager.persistGroups
+	});
+	
+	document.getElementById("addGroupBtn")
+		.addEventListener("click", () => {
+	
+			groupsManager.addGroup();
 		});
+
+	setupSaveHandler({
+		getGroups:
+			groupsManager.getGroups
+	});
+	
+	setupResetHandler({
+		setGroups:
+			groupsManager.setGroups,
+		
+		refreshGroups:
+			groupsManager.refreshGroups
+	});
     
 });

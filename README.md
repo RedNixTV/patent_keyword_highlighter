@@ -369,6 +369,7 @@ patent-highlighter/
 ├── CHANGELOG.md
 │
 └── ui/
+	├── groupsManager.js
     ├── groupRenderer.js
     ├── dragDrop.js
     └── groupHandlers.js
@@ -398,6 +399,9 @@ settings.js
     
 importExport.js
     Profile import/export event handling
+    
+saveReset.js
+    Save and reset workflow management
 
 popup.js
     Application orchestration
@@ -559,22 +563,10 @@ No drag and drop logic.
 
 ### popup.js
 
-Current Structure
+popup.js
+├── application startup
+└── module initialization
 
-├── group orchestration
-└── application startup
-
-Responsible for:
-
-* Application orchestration
-* Group lifecycle management
-* Save workflow
-* Reset workflow
-* Communication with content scripts
-
-No rendering logic.
-No drag and drop logic.
-No group event implementation.
 
 ### content.js
 
@@ -589,6 +581,26 @@ Responsible for:
 No UI logic.
 
 ---
+### ui/groupsManager.js
+
+Current Structure
+
+├── createGroupsManager()
+├── persistGroups()
+├── refreshGroups()
+└── addGroup()
+
+Responsible for:
+
+* Group lifecycle management
+* Group loading
+* Group persistence
+* Drag state management
+* Group rendering orchestration
+* Handler wiring
+
+No UI markup generation.
+No storage implementation.
 
 ### ui/groupRenderer.js
 
@@ -648,14 +660,6 @@ Responsible for:
 * Color updates
 
 No rendering logic.
-
-settings.js
-├── initializeSettings()
-├── initializeAutoHighlight()
-├── initializeWholeWordOnly()
-├── initializeToggleLabel()
-├── loadProfileName()
-└── saveProfileName()
 
 ## Current Features
 
