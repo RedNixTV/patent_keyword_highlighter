@@ -110,7 +110,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 		setGroups: (newGroups) => {
 			groups = newGroups;
 		},
-		refreshGroups
+		refreshGroups,
+		persistGroups
 	});
 
     // -----------------------------------

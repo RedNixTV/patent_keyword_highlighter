@@ -31,7 +31,7 @@ export function setupExportHandler({
 						saveProfileName()||
 						"Patent Search Profile",
 			
-					groups,
+					groups: getGroups(),
 			
 					autoHighlight:
 						settings.autoHighlight,
@@ -66,7 +66,8 @@ export function setupExportHandler({
 
 export function setupImportHandler({
     setGroups,
-    refreshGroups
+    refreshGroups,
+    persistGroups
 }) {
 		document.getElementById("importBtn")
 		.addEventListener("click", () => {
@@ -102,8 +103,8 @@ export function setupImportHandler({
 						setGroups(
 							profile.groups
 						);
-						
-						await saveGroups(groups);
+				
+						await persistGroups();
 						
 						await saveSettings({
 						
@@ -134,8 +135,10 @@ export function setupImportHandler({
 						alert(
 							"Profile imported successfully."
 						);
-				} catch {
-		
+				} catch (error) {
+
+					console.error(error);
+				
 					alert(
 						"Unable to import profile."
 					);
