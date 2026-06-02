@@ -361,6 +361,7 @@ patent-highlighter/
 ├── constants.js
 ├── storage.js
 ├── profiles.js
+├── settings.js
 ├── style.css
 ├── README.md
 ├── CHANGELOG.md
@@ -389,6 +390,9 @@ storage.js
 
 profiles.js
     Profile management and import/export
+    
+settings.js
+    Settings UI management
 
 popup.js
     Application orchestration
@@ -485,11 +489,36 @@ Responsible for:
 
 No UI logic.
 
+### settings.js
+
+Current Structure
+
+├── initializeSettings()
+├── initializeAutoHighlight()
+├── initializeWholeWordOnly()
+├── initializeToggleLabel()
+├── loadProfileName()
+├── saveProfileName()
+├── applySettingsToUI()
+└── resetSettingsUI()
+
+Responsible for:
+
+* Settings UI initialization
+* Auto Highlight behavior
+* Match Whole Word Only behavior
+* Active / Inactive label updates
+* Profile name UI management
+* Settings UI updates
+* Settings UI reset behavior
+
+No storage logic.
+No group management.
+
 ### popup.js
 
 Current Structure
 
-├── settings initialization
 ├── group orchestration
 ├── save/reset handlers
 ├── import/export handlers
@@ -498,7 +527,6 @@ Current Structure
 Responsible for:
 
 * Application orchestration
-* Settings initialization
 * Group lifecycle management
 * Save workflow
 * Reset workflow
@@ -582,6 +610,14 @@ Responsible for:
 * Color updates
 
 No rendering logic.
+
+settings.js
+├── initializeSettings()
+├── initializeAutoHighlight()
+├── initializeWholeWordOnly()
+├── initializeToggleLabel()
+├── loadProfileName()
+└── saveProfileName()
 
 ## Current Features
 
