@@ -55,9 +55,13 @@ function buildRegex(
     }
 
     const pattern =
-        keywords
-            .map(escapeRegex)
-            .join("|");
+		[...keywords]
+			.sort(
+				(a, b) =>
+					b.length - a.length
+			)
+			.map(escapeRegex)
+			.join("|");
 
     return new RegExp(
         wholeWordOnly
