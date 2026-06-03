@@ -127,10 +127,11 @@ async function renderStatsPanel(
     const panel =
         document.createElement("div");
     
-    const savedPosition =
+    const savedSettings =
 		await chrome.storage.local.get([
 			"statsPanelLeft",
-			"statsPanelTop"
+			"statsPanelTop",
+			"analysisScope"
 		]);
 
     panel.id =
@@ -139,15 +140,15 @@ async function renderStatsPanel(
     panel.style.position = "fixed";
 	
 	if (
-		savedPosition.statsPanelLeft &&
-		savedPosition.statsPanelTop
+		savedSettings.statsPanelLeft &&
+		savedSettings.statsPanelTop
 	) {
 	
 		panel.style.left =
-			savedPosition.statsPanelLeft;
+			savedSettings.statsPanelLeft;
 	
 		panel.style.top =
-			savedPosition.statsPanelTop;
+			savedSettings.statsPanelTop;
 	
 		panel.style.right =
 			"auto";
@@ -232,9 +233,45 @@ async function renderStatsPanel(
                     ▼
                 </span>
 
-                <strong>
-                    Patent Profile Match
-                </strong>
+                <div
+					style="
+						display:flex;
+						flex-direction:column;
+						gap:4px;
+					"
+				>
+					<strong>
+						Patent Profile Match
+					</strong>
+				
+					<select
+						id="statsScopeSelect"
+						style="
+							width:160px;
+							font-size:12px;
+						"
+					>
+						<option value="all">
+							Entire Patent
+						</option>
+				
+						<option value="biblio">
+							Biblio
+						</option>
+				
+						<option value="claims">
+							Claims
+						</option>
+				
+						<option value="description">
+							Description
+						</option>
+				
+						<option value="claimsDescription">
+							Claims + Description
+						</option>
+					</select>
+				</div>
             </div>
 
             <button
@@ -275,6 +312,38 @@ async function renderStatsPanel(
     `;
 
     document.body.appendChild(panel);
+    
+    const scopeSelect =
+		panel.querySelector(
+			"#statsScopeSelect"
+		);
+	
+	scopeSelect.value =
+		savedSettings.analysisScope || "all";
+		
+	scopeSelect.addEventListener(
+			"change",
+			async e => {
+		
+				await chrome.storage.local.set({
+		
+					analysisScope:
+						e.target.value
+				});
+		
+				const saved =
+					await chrome.storage.local.get(
+						"groups"
+					);
+		
+				applyHighlights(
+					(saved.groups || [])
+						.filter(
+							group => group.enabled
+						)
+				);
+			}
+		);
 
     // -----------------------------
     // CLOSE
@@ -389,14 +458,14 @@ async function renderStatsPanel(
     );
 }
 
-function highlightGroup(regex, color, groupLabel, stats) {
+function highlightGroup(regex, color, groupLabel, stats, root) {
 
     if (!regex) {
         return;
     }
 
     const walker = document.createTreeWalker(
-        document.body,
+        root,
         NodeFilter.SHOW_TEXT,
         {
             acceptNode(node) {
@@ -485,6 +554,51 @@ function highlightGroup(regex, color, groupLabel, stats) {
     });
 }
 
+function getAnalysisRoots(scope) {
+
+    switch (scope) {
+
+        case "biblio":
+
+            return [
+                document.getElementById(
+                    "abstract_content"
+                )
+            ];
+
+        case "claims":
+
+            return [
+                document.getElementById(
+                    "claims_content"
+                )
+            ];
+
+        case "description":
+
+            return [
+                document.getElementById(
+                    "description_content"
+                )
+            ];
+
+        case "claimsDescription":
+
+            return [
+                document.getElementById(
+                    "claims_content"
+                ),
+                document.getElementById(
+                    "description_content"
+                )
+            ];
+
+        default:
+
+            return [document.body];
+    }
+}
+
 async function applyHighlights(groups)  {
 
     clearHighlights();
@@ -495,8 +609,14 @@ async function applyHighlights(groups)  {
     };
     
     const settings =
-		await chrome.storage.local.get(
-			"wholeWordOnly"
+		await chrome.storage.local.get([
+			"wholeWordOnly",
+			"analysisScope"
+		]);
+		
+	const roots =
+		getAnalysisRoots(
+			settings.analysisScope
 		);
 	
 	const wholeWordOnly =
@@ -512,12 +632,20 @@ async function applyHighlights(groups)  {
 				wholeWordOnly
 			);
 
-        highlightGroup(
-            regex,
-            group.color,
-            group.label,
-			stats
-        );
+        roots.forEach(root => {
+			
+				if (!root) {
+					return;
+				}
+			
+				highlightGroup(
+					regex,
+					group.color,
+					group.label,
+					stats,
+					root
+				);
+			});
     });
 	
 	await renderStatsPanel(

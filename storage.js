@@ -38,7 +38,8 @@ export async function loadSettings() {
         await chrome.storage.local.get([
             "autoHighlight",
             "wholeWordOnly",
-            "profileName"
+            "profileName",
+            "analysisScope"
         ]);
 
     return {
@@ -49,7 +50,10 @@ export async function loadSettings() {
             settings.wholeWordOnly ?? false,
 
         profileName:
-            settings.profileName ?? ""
+            settings.profileName ?? "",
+            
+        analysisScope:
+			settings.analysisScope ?? "all"
     };
 }
 

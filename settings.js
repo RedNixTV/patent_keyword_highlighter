@@ -7,7 +7,7 @@ export function initializeSettings(settings) {
     initializeAutoHighlight(settings);
 
     initializeWholeWordOnly(settings);
-
+    
     initializeToggleLabel();
 
     loadProfileName(settings);
@@ -138,6 +138,8 @@ export function resetSettingsUI() {
 
         wholeWordOnly: false,
 
-        profileName: ""
+        profileName: "",
+        
+        analysisScope: "all"
     });
 }

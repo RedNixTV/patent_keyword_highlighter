@@ -6,7 +6,8 @@ export function createProfileData({
     profileName,
     groups,
     autoHighlight,
-    wholeWordOnly
+    wholeWordOnly,
+    analysisScope
 }) {
     return {
         profileName,
@@ -14,7 +15,8 @@ export function createProfileData({
         exportedAt: new Date().toISOString(),
         groups,
         autoHighlight,
-        wholeWordOnly
+        wholeWordOnly,
+        analysisScope
     };
 }
 
@@ -92,7 +94,8 @@ export async function saveProfile(
 }
 
 export async function exportProfile(
-    profileName
+    profileName,
+    analysisScope
 ) {
     const profile =
         await loadProfile(

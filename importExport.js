@@ -36,7 +36,10 @@ export function setupExportHandler({
 						settings.autoHighlight,
 			
 					wholeWordOnly:
-						settings.wholeWordOnly
+						settings.wholeWordOnly,
+						
+					analysisScope:
+						settings.analysisScope
 				});
 				
 			const blob =
@@ -114,7 +117,10 @@ export function setupImportHandler({
 								profile.autoHighlight ?? true,
 						
 							wholeWordOnly:
-								profile.wholeWordOnly ?? false
+								profile.wholeWordOnly ?? false,
+								
+							analysisScope:
+								profile.analysisScope ?? "all"
 						});
 						
 						applySettingsToUI({

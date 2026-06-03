@@ -73,7 +73,8 @@ export function setupResetHandler({
             await saveSettings({
                 autoHighlight: true,
                 wholeWordOnly: false,
-                profileName: ""
+                profileName: "",
+                analysisScope: "all"
             });
 
             resetSettingsUI();
