@@ -1,6 +1,5 @@
 import {
     loadSettings,
-    saveGroups,
     saveSettings
 } from "./storage.js";
 

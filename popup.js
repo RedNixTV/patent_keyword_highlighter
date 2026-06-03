@@ -1,12 +1,6 @@
 import {
-    DEFAULT_GROUPS
-} from "./constants.js";
-
-import {
-    loadGroups,
     saveGroups,
     loadSettings,
-    saveSettings,
     runMigrations
 } from "./storage.js";
 
@@ -17,9 +11,6 @@ import {
 
 import {
     initializeSettings,
-    saveProfileName,
-    applySettingsToUI,
-    resetSettingsUI
 } from "./settings.js";
 
 import {

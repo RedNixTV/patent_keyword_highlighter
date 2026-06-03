@@ -1,0 +1,303 @@
+# Patent Highlighter
+
+A Chrome extension designed for fast patent and prior art review through dynamic keyword highlighting, search profiles, and patent analytics.
+
+Built for:
+
+* Google Patents
+* FreePatentsOnline
+* USPTO
+* Technical documentation
+* Research articles
+
+---
+
+# Overview
+
+Patent Highlighter helps researchers quickly identify relevant concepts within patents and technical documents.
+
+Instead of manually scanning large references, users can create keyword groups, assign colors, save reusable search profiles, and instantly visualize concept coverage across a document.
+
+The extension is designed for:
+
+* Patentability searches
+* Prior art review
+* Technical literature review
+* Competitive intelligence
+* Research and development workflows
+
+---
+
+# Features
+
+## Search Profile Management
+
+* Dynamic keyword groups
+* Named search profiles
+* Import and export profiles
+* Persistent storage
+* Group enable and disable controls
+* Group collapse and expand controls
+* Drag and drop group ordering
+* Preset and custom colors
+
+## Highlighting Engine
+
+* Dynamic keyword highlighting
+* Match Whole Word Only option
+* Active / Inactive toggle
+* Save workflow
+* Reset workflow
+* Automatic page refresh highlighting
+
+## Patent Analytics
+
+* Floating analytics panel
+* Per group match counts
+* Total match counts
+* Percentage based analysis
+* Automatic sorting by frequency
+* Group color visualization
+* Draggable interface
+* Position persistence
+* Collapse and expand support
+
+---
+
+# Installation
+
+## Chrome Extension Installation
+
+1. Clone or download the repository.
+2. Open Chrome.
+3. Navigate to:
+
+```text
+chrome://extensions
+```
+
+4. Enable:
+
+```text
+Developer Mode
+```
+
+5. Click:
+
+```text
+Load Unpacked
+```
+
+6. Select the project folder.
+
+The extension will now appear in Chrome.
+
+---
+
+# Usage
+
+## Basic Workflow
+
+```text
+Open Extension
+↓
+Create or Select Profile
+↓
+Enter Keywords
+↓
+Save
+↓
+Highlight Patent
+↓
+Review Analytics
+```
+
+## Match Whole Word Only
+
+By default, matching is broad.
+
+Keyword:
+
+```text
+roof
+```
+
+Matches:
+
+```text
+roof
+roofs
+roofing
+rooftop
+```
+
+When Match Whole Word Only is enabled:
+
+```text
+roof
+```
+
+matches only:
+
+```text
+roof
+```
+
+This reduces false positives when searching for exact terminology.
+
+## Save
+
+Save performs two actions:
+
+1. Stores current settings.
+2. Refreshes highlighting on the active page.
+
+## Reset
+
+Reset:
+
+* Clears highlights
+* Removes saved keywords
+* Restores default groups
+* Leaves Active enabled
+
+---
+
+# Search Profiles
+
+Search profiles allow researchers to save and reuse invention specific keyword configurations.
+
+Examples:
+
+```text
+Roof Estimation
+Medical Device
+Athletic Footwear
+AI Systems
+Construction Materials
+```
+
+Profiles support:
+
+* Import
+* Export
+* Versioning
+* Reuse across projects
+* Team sharing
+
+Example export:
+
+```json
+{
+  "profileName": "Roof Estimation",
+  "version": "1.2.0",
+  "groups": [...],
+  "autoHighlight": true,
+  "wholeWordOnly": false
+}
+```
+
+---
+
+# Patent Analytics
+
+Patent Highlighter includes a floating analytics panel that summarizes keyword activity within a reference.
+
+Example:
+
+```text
+Patent Profile Match
+
+Computer Vision / AI ............. 147 (37%)
+Complexity / Classification ...... 125 (31%)
+Roof Geometry Extraction ......... 54 (14%)
+Roof Complexity Indicators ....... 30 (8%)
+Estimation / Waste ............... 23 (6%)
+Image Acquisition ................ 18 (4%)
+
+Total Matches: 397
+```
+
+Benefits:
+
+* Faster patent triage
+* Concept coverage analysis
+* Search profile validation
+* Reduced review time
+* Improved reference prioritization
+
+---
+
+# Project Structure
+
+```text
+patent-highlighter/
+
+popup.js
+    Extension user interface
+
+content.js
+    Highlighting and analytics engine
+
+storage.js
+    Persistent storage management
+
+profiles.js
+    Profile management
+
+ui/
+    User interface components
+```
+
+For architecture details see:
+
+```text
+ARCHITECTURE.md
+```
+
+For development information see:
+
+```text
+DEVELOPMENT.md
+```
+
+---
+
+# Roadmap
+
+## Planned Features
+
+### Phrase Matching
+
+Support for multi word concepts:
+
+* machine learning
+* semantic segmentation
+* neural network
+* roof waste factor
+
+### Search Profile Library
+
+* Multiple saved profiles
+* Profile templates
+* Faster profile switching
+* Team profile sharing
+
+### Advanced Analytics
+
+* Keyword density scoring
+* Phrase density scoring
+* Coverage analysis
+* Concept clustering
+* Patent comparison metrics
+* Exportable reports
+
+### Build System
+
+Potential future migration to:
+
+* Vite
+* Rollup
+* esbuild
+
+to support further modularization of the content script.
