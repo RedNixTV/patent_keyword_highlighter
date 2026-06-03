@@ -287,11 +287,8 @@ Example:
 git add .
 git commit -m "chore(release): prepare vX.Y.Z release"
 
-git add constants.js "update version prior to doing this"
-git commit -m "chore(version): update profile version to v1.2.0"
-git push origin main
-
 git tag -a vX.Y.Z -m "Release vX.Y.Z"
+
 git push origin main
 git push origin vX.Y.Z
 ```
