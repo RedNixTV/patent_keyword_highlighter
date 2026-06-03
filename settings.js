@@ -2,11 +2,15 @@ import {
     saveSettings
 } from "./storage.js";
 
-export function initializeSettings(settings) {
+export function initializeSettings(settings, groupsManager) {
 
     initializeAutoHighlight(settings);
 
     initializeWholeWordOnly(settings);
+    
+    initializeEnableAllGroups(
+        groupsManager
+    );
     
     initializeToggleLabel();
 
@@ -132,6 +136,15 @@ export function applySettingsToUI(settings) {
 
 export function resetSettingsUI() {
 
+	const enableAll =
+		document.getElementById(
+			"enableAllGroups"
+		);
+	
+	if (enableAll) {
+		enableAll.checked = true;
+	}
+
     applySettingsToUI({
 
         autoHighlight: true,
@@ -142,4 +155,42 @@ export function resetSettingsUI() {
         
         analysisScope: "all"
     });
+}
+
+export function initializeEnableAllGroups(
+    groupsManager
+) {
+
+    const checkbox =
+        document.getElementById(
+            "enableAllGroups"
+        );
+
+    checkbox.checked =
+        groupsManager
+            .getGroups()
+            .every(
+                group => group.enabled
+            );
+
+    checkbox.addEventListener(
+        "change",
+        async e => {
+
+            const enabled =
+                e.target.checked;
+
+            const groups =
+                groupsManager
+                    .getGroups();
+
+            groups.forEach(group => {
+                group.enabled = enabled;
+            });
+
+            await groupsManager.persistGroups();
+
+            groupsManager.refreshGroups();
+        }
+    );
 }

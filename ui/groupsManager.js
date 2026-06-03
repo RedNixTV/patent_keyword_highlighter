@@ -73,6 +73,19 @@ export async function createGroupsManager({
 	
 			...handlers
 		});
+		
+		const enableAll =
+			document.getElementById(
+				"enableAllGroups"
+			);
+		
+		if (enableAll) {
+		
+			enableAll.checked =
+				groups.every(
+					group => group.enabled
+				);
+		}
 	}
 	
 	function addGroup() {

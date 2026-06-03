@@ -25,9 +25,7 @@ import {
 document.addEventListener("DOMContentLoaded", async () => {
 
     const settings = await loadSettings();
-    
-    initializeSettings(settings);
-		
+    		
     const groupsContainer =
         document.getElementById("groupsContainer");
 	
@@ -41,6 +39,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 		await createGroupsManager({
 			groupsContainer
 		});
+		
+	initializeSettings(
+		settings,
+		groupsManager
+	);
     
     setupExportHandler({
 		getGroups:
