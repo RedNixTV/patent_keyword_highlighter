@@ -1,3 +1,17 @@
+# Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+  - [Search Profile Management](#search-profile-management)
+  - [Highlighting Engine](#highlighting-engine)
+  - [Patent Analytics](#patent-analytics)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Search Profiles](#search-profiles)
+- [Patent Analytics](#patent-analytics)
+- [Project Structure](#project-structure)
+- [Roadmap](#roadmap)
+
 # Patent Highlighter
 
 A Chrome extension designed for fast patent and prior art review through dynamic keyword highlighting, search profiles, and patent analytics.
@@ -61,6 +75,9 @@ The extension is designed for:
 * Draggable interface
 * Position persistence
 * Collapse and expand support
+* Patent section filtering
+* Scope based analysis (Entire Patent, Biblio, Claims)
+* Enable All Groups support
 
 ---
 
@@ -166,6 +183,7 @@ Reset:
 # Search Profiles
 
 Search profiles allow researchers to save and reuse invention specific keyword configurations.
+Profiles exported from older versions are automatically migrated when possible.
 
 Examples:
 
@@ -234,19 +252,34 @@ Benefits:
 patent-highlighter/
 
 popup.js
-    Extension user interface
+    Application orchestration
 
 content.js
     Highlighting and analytics engine
 
+constants.js
+    Shared constants and version management
+
 storage.js
-    Persistent storage management
+    Storage and migrations
 
 profiles.js
-    Profile management
+    Profile import/export helpers
+
+settings.js
+    Settings management
+
+importExport.js
+    Import/export workflow
+
+saveReset.js
+    Save/reset workflow
 
 ui/
-    User interface components
+├── groupRenderer.js
+├── groupHandlers.js
+├── dragDrop.js
+└── groupsManager.js
 ```
 
 For architecture details see:

@@ -1,0 +1,71 @@
+# Changelog
+
+## v1.2.0 (2026-06-03)
+
+Analytics, Profiles, and Architecture Refactor
+
+### Added
+
+* Patent Profile Analytics panel
+* Patent relevance scoring and match statistics
+* Named search profiles
+* Profile import and export support
+* Patent section filtering
+* Statistics panel scope selector
+* Enable All Groups toggle
+* Analytics panel position persistence across patent pages
+* Profile version tracking and schema migration support
+
+### Improved
+
+* Longer keywords are prioritized during regex matching
+* Statistics filtering and patent section analysis workflow
+* Group management experience
+* Project documentation organization
+* Module separation and maintainability
+
+### Refactored
+
+* Extracted settings management into `settings.js`
+* Extracted storage operations into `storage.js`
+* Extracted profile management into `profiles.js`
+* Extracted import/export workflows into `importExport.js`
+* Extracted save/reset workflows into `saveReset.js`
+* Extracted group rendering into `groupRenderer.js`
+* Extracted drag and drop logic into `dragDrop.js`
+* Extracted group lifecycle management into `groupsManager.js`
+* Centralized constants and version management
+* Removed direct storage access from `popup.js`
+
+
+## v1.1.0 (2026-05-30)
+
+Stable v1.1 before phrase engine
+
+### Added
+
+* Active / Inactive toggle
+* Save workflow
+* Reset workflow
+* Automatic highlighting on page load
+* Match Whole Word Only option
+* Immediate highlight refresh when match mode changes
+* Regex mode aware caching
+* Improved project documentation
+
+### Improved
+
+* Highlighting engine refactored to support multiple matching modes
+* Auto highlight behavior across page refreshes and new patent pages
+* User workflow and setup documentation
+* Reset behavior now restores all default settings
+
+## v1.0.0 (2026-05-29)
+
+Initial stable release
+
+* Dynamic groups
+* Drag reorder
+* Collapse / expand
+* Persistent storage
+

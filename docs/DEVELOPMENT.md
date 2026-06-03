@@ -1,3 +1,20 @@
+# Table of Contents
+
+- [Development Environment](#development-environment)
+- [Local Setup](#local-setup)
+- [Repository Layout](#repository-layout)
+- [Development Workflow](#development-workflow)
+- [Coding Standards](#coding-standards)
+  - [General Principles](#general-principles)
+  - [Module Guidelines](#module-guidelines)
+- [Testing](#testing)
+- [Debugging](#debugging)
+- [Release Process](#release-process)
+- [Refactoring Guidelines](#refactoring-guidelines)
+- [Highlighting Engine](#highlighting-engine)
+- [DOM Safety](#dom-safety)
+- [Future Development](#future-development)
+
 # Development Guide
 
 ## Purpose
@@ -78,6 +95,10 @@ saveReset.js
 style.css
 
 ui/
+├── groupRenderer.js
+├── groupHandlers.js
+├── dragDrop.js
+└── groupsManager.js
 ```
 
 Detailed module responsibilities are documented in `ARCHITECTURE.md`.
@@ -191,6 +212,9 @@ Verify:
 * Dragging functionality
 * Position persistence
 * Collapse and expand behavior
+* Scope filtering
+* Enable All Groups behavior
+* Statistics panel updates
 
 ---
 
@@ -224,25 +248,54 @@ chrome.storage.local.get(null, console.log);
 ```
 
 ---
-
 # Release Process
 
-Before creating a release:
+Before creating a release, verify:
 
-1. Update CHANGELOG.md
-2. Update manifest.json version
-3. Update profile version if required
-4. Verify extension functionality
-5. Commit release changes
-6. Create Git tag
-7. Publish GitHub release
+```text
+✓ CHANGELOG.md updated
+✓ README.md updated
+✓ DEVELOPMENT.md updated
+✓ ARCHITECTURE.md updated
+✓ manifest.json version updated
+✓ update constant for profile version
+✓ smoke test extension
+□ create release commit
+□ create version tag
+□ publish GitHub release
+```
+
+Versioning roadmap:
+
+```text
+v1.0.0  Stable v1 before phrase engine
+
+v1.1.0  Stable v1.1 before phrase engine
+
+v1.2.0  Stable v1.2 before phrase engine
+
+v1.3.0  Stable v1.3 with phrase engine
+
+v1.4.0  Stable v1.4 before statistics dashboard
+
+v1.5.0  Stable v1.5 with statistics dashboard
+```
 
 Example:
 
 ```bash
-git tag v1.2.0
-git push origin v1.2.0
+git add .
+git commit -m "chore(release): prepare vX.Y.Z release"
+
+git add constants.js "update version prior to doing this"
+git commit -m "chore(version): update profile version to v1.2.0"
+git push origin main
+
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
+git push origin main
+git push origin vX.Y.Z
 ```
+
 
 ---
 
@@ -324,7 +377,7 @@ Planned areas:
 
 * Phrase matching
 * Search profile library
-* Enhanced analytics
+* Analytics Relevance Score display
 * Build system adoption
 * Content script modularization
 

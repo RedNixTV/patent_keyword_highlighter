@@ -1,3 +1,33 @@
+# Table of Contents
+
+- [Architectural Goals](#architectural-goals)
+- [System Overview](#system-overview)
+  - [Popup Application](#popup-application)
+  - [Content Script](#content-script)
+- [Architectural Boundaries](#architectural-boundaries)
+  - [UI Layer](#ui-layer)
+  - [Configuration Layer](#configuration-layer)
+  - [Storage Layer](#storage-layer)
+  - [Profile Layer](#profile-layer)
+  - [Content Layer](#content-layer)
+- [Runtime Architecture](#runtime-architecture)
+  - [Settings Flow](#settings-flow)
+  - [Highlighting Flow](#highlighting-flow)
+- [Dependency Model](#dependency-model)
+  - [Core Dependency Diagram](#core-dependency-diagram)
+- [Module Responsibilities](#module-responsibilities)
+  - [constants.js](#constantsjs)
+  - [storage.js](#storagejs)
+  - [profiles.js](#profilesjs)
+  - [settings.js](#settingsjs)
+  - [importExport.js](#importexportjs)
+  - [saveReset.js](#saveresetjs)
+  - [popup.js](#popupjs)
+  - [content.js](#contentjs)
+- [Repository Structure](#repository-structure)
+- [Future Architecture](#future-architecture)
+- [Refactor Status](#refactor-status)
+
 # Patent Highlighter Architecture
 
 ## Purpose
@@ -112,6 +142,26 @@ Must not:
 
 * Render UI
 * Attach event handlers
+
+
+## Configuration Layer
+
+Files:
+
+constants.js
+
+Responsibilities:
+
+* Default groups
+* Preset colors
+* Storage versions
+* Profile versions
+
+Must not:
+
+* Access storage
+* Render UI
+* Manipulate profiles
 
 ---
 
@@ -291,9 +341,8 @@ Responsibilities:
 
 Dependencies:
 
-```text
 storage.js
-```
+constants.js
 
 ---
 
@@ -414,6 +463,7 @@ Completed:
 
 Remaining:
 
-```text
-□ content.js
-```
+□ content.js modularization
+□ analytics module extraction
+□ highlighting module extraction
+□ build system adoption
