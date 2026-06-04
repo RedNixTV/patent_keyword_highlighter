@@ -14,7 +14,12 @@ export function createPresetButtons(selectedColor) {
         .join("");
 }
 
-export function createGroupMarkup(group) {
+export function createGroupMarkup(group, activeKeywordMode) {
+
+	const entries =
+		activeKeywordMode === "phrase"
+			? group.phrases
+			: group.keywords;
 
     return `
         <div class="group-header">
@@ -40,7 +45,7 @@ export function createGroupMarkup(group) {
         <div class="group-content"
              style="display: ${group.collapsed ? "none" : "block"};">
 
-            <textarea class="group-keywords">${group.keywords.join(", ")}</textarea>
+            <textarea class="group-keywords">${entries.join(", ")}</textarea>
 
             <div class="color-row">
 
@@ -66,6 +71,7 @@ export function createGroupMarkup(group) {
 
 export function renderGroups({
     groups,
+    activeKeywordMode,
     groupsContainer,
     persistGroups,
     attachDragHandlers,
@@ -91,7 +97,7 @@ export function renderGroups({
         wrapper.draggable = true;
 
         wrapper.innerHTML =
-            createGroupMarkup(group);
+            createGroupMarkup(group, activeKeywordMode);
 
         onToggleCollapse(
             wrapper,

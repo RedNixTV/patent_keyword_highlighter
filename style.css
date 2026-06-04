@@ -166,3 +166,17 @@ button {
     margin-bottom: 5px;
     box-sizing: border-box;
 }
+
+.keyword-mode-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.keyword-mode-tabs button {
+    flex: 1;
+}
+
+.mode-active {
+    font-weight: bold;
+}

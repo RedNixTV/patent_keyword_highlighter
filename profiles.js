@@ -178,9 +178,9 @@ function normalizeGroups(
 
         collapsed:
             group.collapsed ?? false,
-
-        phraseMode:
-            group.phraseMode ?? false,
+            
+        phrases:
+			group.phrases ?? [],
 
         ...group
     }));

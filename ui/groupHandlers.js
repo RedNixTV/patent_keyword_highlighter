@@ -88,18 +88,33 @@ export function setupLabelHandler({
 export function setupKeywordsHandler({
     wrapper,
     group,
-    persistGroups
+    persistGroups,
+    activeKeywordMode
 }) {
 
     wrapper
         .querySelector(".group-keywords")
         .addEventListener("input", e => {
 
-            group.keywords =
-                e.target.value
-                    .split(",")
-                    .map(k => k.trim())
-                    .filter(Boolean);
+            const parsedValues =
+				e.target.value
+					.split(",")
+					.map(k => k.trim())
+					.filter(Boolean);
+			
+			if (
+				activeKeywordMode === "phrase"
+			) {
+			
+				group.phrases =
+					parsedValues;
+			
+			}
+			else {
+			
+				group.keywords =
+					parsedValues;
+			}
 
             persistGroups();
         });
@@ -158,7 +173,8 @@ export function createGroupHandlers({
     groups,
     setGroups,
     refreshGroups,
-    persistGroups
+    persistGroups,
+    activeKeywordMode
 }) {
 
     return {
@@ -200,7 +216,8 @@ export function createGroupHandlers({
                 setupKeywordsHandler({
                     wrapper,
                     group,
-                    persistGroups
+                    persistGroups,
+                    activeKeywordMode
                 });
             },
 

@@ -23,11 +23,11 @@ function escapeRegex(text) {
     return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function getRegex(group, wholeWordOnly) {
+function getRegex(searchTerms, wholeWordOnly) {
 
     const key =
     		`${wholeWordOnly}|` +
-			[...group.keywords]
+			[...searchTerms]
 				.sort()
 				.join(",");
 
@@ -36,7 +36,7 @@ function getRegex(group, wholeWordOnly) {
         regexCache.set(
             key,
             buildRegex(
-				group.keywords,
+				searchTerms,
 				wholeWordOnly
 			)
         );
@@ -46,16 +46,16 @@ function getRegex(group, wholeWordOnly) {
 }
 
 function buildRegex(
-    keywords,
+    searchTerms,
     wholeWordOnly
 ) {
 
-    if (!keywords.length) {
+    if (!searchTerms.length) {
         return null;
     }
 
     const pattern =
-		[...keywords]
+		[...searchTerms]
 			.sort(
 				(a, b) =>
 					b.length - a.length
@@ -611,8 +611,13 @@ async function applyHighlights(groups)  {
     const settings =
 		await chrome.storage.local.get([
 			"wholeWordOnly",
-			"analysisScope"
+			"analysisScope",
+			"activeKeywordMode"
 		]);
+		
+	const activeKeywordMode =
+		settings.activeKeywordMode ||
+		"single";
 		
 	const roots =
 		getAnalysisRoots(
@@ -626,9 +631,14 @@ async function applyHighlights(groups)  {
     	
     	stats.groups[group.label] = 0;
     	
+    	const searchTerms =
+			activeKeywordMode === "phrase"
+				? group.phrases
+				: group.keywords;
+    	
         const regex =
 			getRegex(
-				group,
+				searchTerms,
 				wholeWordOnly
 			);
 

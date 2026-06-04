@@ -1,6 +1,8 @@
 import {
     loadGroups,
-    saveGroups
+    saveGroups,
+    loadKeywordMode,
+    saveKeywordMode
 } from "../storage.js";
 
 import {
@@ -25,6 +27,80 @@ export async function createGroupsManager({
 
     let draggedGroupId =
         null;
+        
+    let activeKeywordMode =
+		await loadKeywordMode();
+		
+	const singleModeBtn =
+		document.getElementById(
+			"singleModeBtn"
+		);
+	
+	const phraseModeBtn =
+		document.getElementById(
+			"phraseModeBtn"
+		);
+		
+	function updateModeButtons() {
+	
+		singleModeBtn.classList.toggle(
+			"mode-active",
+			activeKeywordMode === "single"
+		);
+	
+		phraseModeBtn.classList.toggle(
+			"mode-active",
+			activeKeywordMode === "phrase"
+		);
+	}
+	
+	updateModeButtons();
+	
+	singleModeBtn.addEventListener(
+		"click",
+		async () => {
+	
+			if (
+				activeKeywordMode === "single"
+			) {
+				return;
+			}
+	
+			activeKeywordMode =
+				"single";
+	
+			await saveKeywordMode(
+				activeKeywordMode
+			);
+	
+			updateModeButtons();
+	
+			refreshGroups();
+		}
+	);
+	
+	phraseModeBtn.addEventListener(
+		"click",
+		async () => {
+	
+			if (
+				activeKeywordMode === "phrase"
+			) {
+				return;
+			}
+	
+			activeKeywordMode =
+				"phrase";
+	
+			await saveKeywordMode(
+				activeKeywordMode
+			);
+	
+			updateModeButtons();
+	
+			refreshGroups();
+		}
+	);
 
     async function persistGroups() {
 		await saveGroups(groups);
@@ -35,6 +111,7 @@ export async function createGroupsManager({
 		const handlers =
 			createGroupHandlers({
 				groups,
+				activeKeywordMode,
 				setGroups: (newGroups) => {
 					groups = newGroups;
 				},
@@ -45,6 +122,8 @@ export async function createGroupsManager({
 		renderGroups({
 	
 			groups,
+			
+			activeKeywordMode,
 	
 			groupsContainer,
 	
@@ -99,6 +178,8 @@ export async function createGroupsManager({
 			color: "#ffff00",
 	
 			keywords: [],
+			
+			phrases: [],
 	
 			collapsed: false,
 	

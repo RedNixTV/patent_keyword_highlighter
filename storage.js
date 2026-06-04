@@ -19,6 +19,8 @@ export async function loadGroups() {
 
         enabled: true,
         collapsed: false,
+        phrases:
+			group.phrases ?? [],
 
         ...group
     }));
@@ -98,12 +100,60 @@ export async function runMigrations() {
         }));
 
         version =
-            STORAGE_VERSION;
+            STORAGE_VERSIONS.V1_1_0;
     }
+    
+    if (
+		version ===
+		STORAGE_VERSIONS.V1_1_0
+	) {
+	
+		version =
+			STORAGE_VERSIONS.V1_2_0;
+	}
+	
+	if (
+		version ===
+		STORAGE_VERSIONS.V1_2_0
+	) {
+	
+		groups = groups.map(group => ({
+	
+			phrases:
+				group.phrases ?? [],
+	
+			...group
+		}));
+	
+		version =
+			STORAGE_VERSIONS.V1_3_0;
+	}
 
     await chrome.storage.local.set({
 
         groups,
         storageVersion: version
+    });
+}
+
+export async function loadKeywordMode() {
+
+    const saved =
+        await chrome.storage.local.get(
+            "activeKeywordMode"
+        );
+
+    return (
+        saved.activeKeywordMode ||
+        "single"
+    );
+}
+
+export async function saveKeywordMode(
+    mode
+) {
+
+    await chrome.storage.local.set({
+        activeKeywordMode: mode
     });
 }
