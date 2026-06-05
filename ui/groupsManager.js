@@ -183,7 +183,11 @@ export async function createGroupsManager({
 	
 			collapsed: false,
 	
-			enabled: true
+			enabled: true,
+			
+			weight: 3,
+
+			critical: false
 		});
 	
 		refreshGroups();

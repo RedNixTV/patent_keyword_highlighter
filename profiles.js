@@ -181,6 +181,12 @@ function normalizeGroups(
             
         phrases:
 			group.phrases ?? [],
+			
+		weight:
+			group.weight ?? 3,
+		
+		critical:
+			group.critical ?? false,
 
         ...group
     }));

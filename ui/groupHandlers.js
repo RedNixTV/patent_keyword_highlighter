@@ -169,6 +169,42 @@ export function setupPresetColorHandler({
         });
 }
 
+export function setupWeightHandler({
+    wrapper,
+    group,
+    persistGroups
+}) {
+
+    wrapper
+        .querySelector(".group-weight")
+        .addEventListener("change", e => {
+
+            group.weight =
+                Number(
+                    e.target.value
+                );
+
+            persistGroups();
+        });
+}
+
+export function setupCriticalHandler({
+    wrapper,
+    group,
+    persistGroups
+}) {
+
+    wrapper
+        .querySelector(".group-critical")
+        .addEventListener("change", e => {
+
+            group.critical =
+                e.target.checked;
+
+            persistGroups();
+        });
+}
+
 export function createGroupHandlers({
     groups,
     setGroups,
@@ -209,6 +245,26 @@ export function createGroupHandlers({
                     persistGroups
                 });
             },
+            
+        onWeightChange:
+			(wrapper, group) => {
+		
+				setupWeightHandler({
+					wrapper,
+					group,
+					persistGroups
+				});
+			},
+		
+		onCriticalChange:
+			(wrapper, group) => {
+		
+				setupCriticalHandler({
+					wrapper,
+					group,
+					persistGroups
+				});
+			},
 
         onKeywordsChange:
             (wrapper, group) => {

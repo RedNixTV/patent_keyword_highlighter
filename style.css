@@ -180,3 +180,18 @@ button {
 .mode-active {
     font-weight: bold;
 }
+
+.group-structure-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.group-weight {
+    width: 60px;
+}
+
+.group-critical {
+    margin-left: 8px;
+}

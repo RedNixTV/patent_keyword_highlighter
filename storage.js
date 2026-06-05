@@ -21,6 +21,11 @@ export async function loadGroups() {
         collapsed: false,
         phrases:
 			group.phrases ?? [],
+		weight:
+			group.weight ?? 3,
+	
+		critical:
+			group.critical ?? false,
 
         ...group
     }));
@@ -121,6 +126,12 @@ export async function runMigrations() {
 	
 			phrases:
 				group.phrases ?? [],
+				
+			weight:
+				group.weight ?? 3,
+	
+			critical:
+				group.critical ?? false,
 	
 			...group
 		}));

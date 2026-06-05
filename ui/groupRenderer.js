@@ -43,7 +43,57 @@ export function createGroupMarkup(group, activeKeywordMode) {
         </div>
 
         <div class="group-content"
+
              style="display: ${group.collapsed ? "none" : "block"};">
+             
+             <div class="group-structure-row">
+			
+				<label>
+					Weight
+				</label>
+			
+				<select class="group-weight">
+			
+					<option value="1"
+						${group.weight === 1 ? "selected" : ""}>
+						1
+					</option>
+			
+					<option value="2"
+						${group.weight === 2 ? "selected" : ""}>
+						2
+					</option>
+			
+					<option value="3"
+						${group.weight === 3 ? "selected" : ""}>
+						3
+					</option>
+			
+					<option value="4"
+						${group.weight === 4 ? "selected" : ""}>
+						4
+					</option>
+			
+					<option value="5"
+						${group.weight === 5 ? "selected" : ""}>
+						5
+					</option>
+			
+				</select>
+			
+				<label>
+			
+					<input
+						type="checkbox"
+						class="group-critical"
+						${group.critical ? "checked" : ""}
+					>
+			
+					Critical
+			
+				</label>
+			
+			</div>
 
             <textarea class="group-keywords">${entries.join(", ")}</textarea>
 
@@ -81,7 +131,9 @@ export function renderGroups({
     onPresetColorChange,
     onDeleteGroup,
     onToggleCollapse,
-    onToggleEnabled
+    onToggleEnabled,
+    onWeightChange,
+    onCriticalChange
 }) {
 
     groupsContainer.innerHTML = "";
@@ -118,6 +170,16 @@ export function renderGroups({
             wrapper,
             group
         );
+        
+        onWeightChange(
+			wrapper,
+			group
+		);
+		
+		onCriticalChange(
+			wrapper,
+			group
+		);
 
         onKeywordsChange(
             wrapper,

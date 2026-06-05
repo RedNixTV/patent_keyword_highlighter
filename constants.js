@@ -6,7 +6,9 @@ export const DEFAULT_GROUPS = [
         keywords: [],
         phrases: [],
         collapsed: false,
-        enabled: true
+        enabled: true,
+        weight: 3,
+		critical: false
     },
 
     {
@@ -16,7 +18,9 @@ export const DEFAULT_GROUPS = [
         keywords: [],
         phrases: [],
         collapsed: false,
-        enabled: true
+        enabled: true,
+        weight: 3,
+		critical: false
     },
 
     {
@@ -26,7 +30,9 @@ export const DEFAULT_GROUPS = [
         keywords: [],
         phrases: [],
         collapsed: false,
-        enabled: true
+        enabled: true,
+        weight: 3,
+		critical: false
     }
 ];
 
