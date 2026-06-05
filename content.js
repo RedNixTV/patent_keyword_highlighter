@@ -132,11 +132,16 @@ async function renderStatsPanel(
 		await chrome.storage.local.get([
 			"statsPanelLeft",
 			"statsPanelTop",
-			"analysisScope"
+			"analysisScope",
+			"activeKeywordMode"
 		]);
 
     panel.id =
         "patent-relevance-panel";
+        
+    const activeKeywordMode =
+		savedSettings.activeKeywordMode ||
+		"single";
 
     panel.style.position = "fixed";
 	
@@ -166,7 +171,7 @@ async function renderStatsPanel(
     panel.style.borderRadius = "8px";
     panel.style.boxShadow =
         "0 4px 12px rgba(0,0,0,.15)";
-    panel.style.width = "320px";
+    panel.style.width = "420px";
     panel.style.fontSize = "13px";
     panel.style.fontFamily = "Arial, sans-serif";
     panel.style.overflow = "hidden";
@@ -398,6 +403,46 @@ async function renderStatsPanel(
 							Claims + Description
 						</option>
 					</select>
+					
+					<div
+							style="
+								display:flex;
+								gap:6px;
+								margin-top:6px;
+							"
+						>
+						
+							<button
+								id="statsSingleModeBtn"
+								style="
+									flex:1;
+									font-weight:
+										${
+											activeKeywordMode === "single"
+												? "bold"
+												: "normal"
+										};
+								"
+							>
+								Single Words
+							</button>
+						
+							<button
+								id="statsPhraseModeBtn"
+								style="
+									flex:1;
+									font-weight:
+										${
+											activeKeywordMode === "phrase"
+												? "bold"
+												: "normal"
+										};
+								"
+							>
+								Phrases
+							</button>
+						
+						</div>
 				</div>
             </div>
 
@@ -496,6 +541,62 @@ async function renderStatsPanel(
 		
 					analysisScope:
 						e.target.value
+				});
+		
+				const saved =
+					await chrome.storage.local.get(
+						"groups"
+					);
+		
+				applyHighlights(
+					(saved.groups || [])
+						.filter(
+							group => group.enabled
+						)
+				);
+			}
+		);
+		
+	const singleModeBtn =
+			panel.querySelector(
+				"#statsSingleModeBtn"
+			);
+		
+		const phraseModeBtn =
+			panel.querySelector(
+				"#statsPhraseModeBtn"
+			);
+		
+		singleModeBtn.addEventListener(
+			"click",
+			async () => {
+		
+				await chrome.storage.local.set({
+					activeKeywordMode:
+						"single"
+				});
+		
+				const saved =
+					await chrome.storage.local.get(
+						"groups"
+					);
+		
+				applyHighlights(
+					(saved.groups || [])
+						.filter(
+							group => group.enabled
+						)
+				);
+			}
+		);
+		
+		phraseModeBtn.addEventListener(
+			"click",
+			async () => {
+		
+				await chrome.storage.local.set({
+					activeKeywordMode:
+						"phrase"
 				});
 		
 				const saved =
