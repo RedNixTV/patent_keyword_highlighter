@@ -2,6 +2,7 @@ console.log("CONTENT SCRIPT LOADED");
 // Cache compiled regex objects so they can be reused
 // across multiple highlight runs.
 const regexCache = new Map();
+const expandedStatsGroups = new Set();
 
 function clearHighlights() {
 	
@@ -169,44 +170,101 @@ async function renderStatsPanel(
     panel.style.fontSize = "13px";
     panel.style.fontFamily = "Arial, sans-serif";
     panel.style.overflow = "hidden";
-
+    
     const rowsHtml =
-        sortedGroups
-            .map(([label, count]) => {
-
-                const pct =
-                    stats.totalMatches
-                        ? Math.round(
-                            count /
-                            stats.totalMatches *
-                            100
-                        )
-                        : 0;
-
-                return `
-                    <div
-                        style="
-                            display:flex;
-                            justify-content:space-between;
-                            margin-bottom:6px;
-                        "
-                    >
-                        <span
-                            style="
-                                color:${colorMap[label]};
-                                font-weight:bold;
-                            "
-                        >
-                            ${label}
-                        </span>
-
-                        <span>
-                            ${count} (${pct}%)
-                        </span>
-                    </div>
-                `;
-            })
-            .join("");
+		sortedGroups
+			.map(([label, count]) => {
+	
+				const pct =
+					stats.totalMatches
+						? Math.round(
+							count /
+							stats.totalMatches *
+							100
+						)
+						: 0;
+	
+				const expanded =
+					expandedStatsGroups.has(
+						label
+					);
+	
+				const keywordRows =
+					Object.entries(
+						stats.keywords[label] || {}
+					)
+					.sort(
+						(a, b) =>
+							b[1] - a[1]
+					)
+					.map(
+						([keyword, frequency]) => `
+							<div
+								class="stats-keyword-row"
+								style="
+									display:flex;
+									justify-content:space-between;
+									padding-left:18px;
+									margin-top:4px;
+								"
+							>
+								<span>
+									${keyword}
+								</span>
+	
+								<span>
+									${frequency}
+								</span>
+							</div>
+						`
+					)
+					.join("");
+	
+				return `
+					<div>
+	
+						<div
+							class="stats-group-header"
+							data-label="${label}"
+							style="
+								display:flex;
+								justify-content:space-between;
+								margin-bottom:6px;
+								cursor:pointer;
+							"
+						>
+	
+							<span
+								style="
+									color:${colorMap[label]};
+									font-weight:bold;
+								"
+							>
+								${
+									expanded
+										? "▼"
+										: "▶"
+								}
+	
+								${label}
+							</span>
+	
+							<span>
+								${count} (${pct}%)
+							</span>
+	
+						</div>
+	
+						${
+							expanded
+								? keywordRows
+								: ""
+						}
+	
+					</div>
+				`;
+			})
+			.join("");
 
     panel.innerHTML = `
         <div
@@ -312,6 +370,46 @@ async function renderStatsPanel(
     `;
 
     document.body.appendChild(panel);
+    
+    panel
+		.querySelectorAll(
+			".stats-group-header"
+		)
+		.forEach(header => {
+	
+			header.addEventListener(
+				"click",
+				() => {
+	
+					const label =
+						header.dataset.label;
+	
+					if (
+						expandedStatsGroups.has(
+							label
+						)
+					) {
+	
+						expandedStatsGroups.delete(
+							label
+						);
+	
+					} else {
+	
+						expandedStatsGroups.add(
+							label
+						);
+	
+					}
+	
+					renderStatsPanel(
+						stats,
+						groups
+					);
+				}
+			);
+	
+		});
     
     const scopeSelect =
 		panel.querySelector(
@@ -458,7 +556,7 @@ async function renderStatsPanel(
     );
 }
 
-function highlightGroup(regex, color, groupLabel, stats, root) {
+function highlightGroup(regex, color, groupLabel, stats, root, searchTerms) {
 
     if (!regex) {
         return;
@@ -520,6 +618,14 @@ function highlightGroup(regex, color, groupLabel, stats, root) {
         
         	stats.groups[groupLabel] = (stats.groups[groupLabel] || 0) + 1;
 			stats.totalMatches++;
+			
+			const matchedKeyword =
+				match[0].toLowerCase();
+			
+			stats.keywords[groupLabel][matchedKeyword] =
+				(
+					stats.keywords[groupLabel][matchedKeyword] || 0
+				) + 1;
 			
             const before = text.slice(lastIndex, match.index);
 
@@ -605,7 +711,8 @@ async function applyHighlights(groups)  {
     
     const stats = {
         totalMatches: 0,
-        groups: {}
+        groups: {},
+        keywords: {}
     };
     
     const settings =
@@ -630,6 +737,7 @@ async function applyHighlights(groups)  {
     groups.forEach(group => {
     	
     	stats.groups[group.label] = 0;
+    	stats.keywords[group.label] = {};
     	
     	const searchTerms =
 			activeKeywordMode === "phrase"
@@ -653,7 +761,8 @@ async function applyHighlights(groups)  {
 					group.color,
 					group.label,
 					stats,
-					root
+					root,
+					searchTerms
 				);
 			});
     });
