@@ -224,19 +224,34 @@ async function renderStatsPanel(
 		sortedGroups
 			.map(([label, count]) => {
 	
-				const pct =
-					stats.totalMatches
-						? Math.round(
-							count /
-							stats.totalMatches *
-							100
-						)
-						: 0;
-	
 				const expanded =
 					expandedStatsGroups.has(
 						label
 					);
+					
+				const group =
+					groups.find(
+						g => g.label === label
+					);
+				
+				const totalKeywords =
+					activeKeywordMode === "phrase"
+						? (group?.phrases?.length || 0)
+						: (group?.keywords?.length || 0);
+				
+				const uniqueMatched =
+					Object.keys(
+						stats.keywords[label] || {}
+					).length;
+				
+				const coveragePct =
+					totalKeywords > 0
+						? Math.round(
+							uniqueMatched /
+							totalKeywords *
+							100
+						)
+						: 0;
 	
 				const keywords =
 					Object.entries(
@@ -367,8 +382,16 @@ async function renderStatsPanel(
 								${label}
 							</span>
 	
-							<span>
-								${count} (${pct}%)
+							<span
+								style="
+									white-space:nowrap;
+									font-size:12px;
+								"
+							>
+								${uniqueMatched}/${totalKeywords}
+								(${coveragePct}%)
+								|
+								${count} hits
 							</span>
 	
 						</div>
