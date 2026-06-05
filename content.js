@@ -149,6 +149,16 @@ async function renderStatsPanel(
 		savedSettings.activeKeywordMode ||
 		"single";
 		
+	const structuralLabel =
+		activeKeywordMode === "phrase"
+			? "Structural"
+			: "Keyword Coverage";
+	
+	const criticalLabel =
+		activeKeywordMode === "phrase"
+			? "Critical"
+			: "Keyword Critical";
+		
 	const activeTabStyle = `
 		flex:1;
 		padding:4px 8px;
@@ -486,14 +496,14 @@ async function renderStatsPanel(
 								"
 							>
 								<strong>
-									Structural:
+									${structuralLabel}:
 								</strong>
 								${structuralScore}
 							
 								&nbsp;&nbsp;
 							
 								<strong>
-									Critical:
+									${criticalLabel}:
 								</strong>
 								${criticalScore}
 							</div>
@@ -1015,7 +1025,28 @@ async function applyHighlights(groups)  {
 				);
 			});
 			
-		const matched = stats.groups[group.label] > 0;
+		let matched;
+		
+		if (
+			activeKeywordMode === "phrase"
+		) {
+		
+			matched =
+				stats.groups[group.label] > 0;
+		
+		}
+		else {
+		
+			const threshold =
+				Math.max(
+					5,
+					(group.weight || 0) * 5
+				);
+		
+			matched =
+				stats.groups[group.label] >=
+				threshold;
+		}
 		
 		if (matched) {
 		
