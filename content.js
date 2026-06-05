@@ -112,6 +112,12 @@ async function renderStatsPanel(
 ) {
 
     removeStatsPanel();
+    
+    const structuralScore =
+		`${stats.structural.achievedWeight} / ${stats.structural.totalWeight}`;
+	
+	const criticalScore =
+		`${stats.structural.matchedCritical} / ${stats.structural.totalCritical}`;
 
     const sortedGroups =
         Object.entries(stats.groups)
@@ -433,35 +439,64 @@ async function renderStatsPanel(
 					</select>
 					
 					<div
-							style="
-								display:flex;
-								gap:1px;
-								margin-top:6px;
-							"
-						>
-						
-							<button
-								id="statsSingleModeBtn"
-								style="${
-									activeKeywordMode === "single"
-										? activeTabStyle
-										: inactiveTabStyle
-								}"
+						style="
+							display:flex;
+							justify-content:space-between;
+							align-items:center;
+							gap:12px;
+							margin-top:6px;
+						"
+					>
+							<div
+								style="
+									display:flex;
+									gap:1px;
+									flex:1;
+								"
 							>
-								Single Words
-							</button>
-						
-							<button
-								id="statsPhraseModeBtn"
-								style="${
-									activeKeywordMode === "phrase"
-										? activeTabStyle
-										: inactiveTabStyle
-								}"
+							
+								<button
+									id="statsSingleModeBtn"
+									style="${
+										activeKeywordMode === "single"
+											? activeTabStyle
+											: inactiveTabStyle
+									}"
+								>
+									Single Words
+								</button>
+							
+								<button
+									id="statsPhraseModeBtn"
+									style="${
+										activeKeywordMode === "phrase"
+											? activeTabStyle
+											: inactiveTabStyle
+									}"
+								>
+									Phrases
+								</button>
+							
+							</div>
+							
+							<div
+								style="
+									font-size:11px;
+									white-space:nowrap;
+								"
 							>
-								Phrases
-							</button>
-						
+								<strong>
+									Structural:
+								</strong>
+								${structuralScore}
+							
+								&nbsp;&nbsp;
+							
+								<strong>
+									Critical:
+								</strong>
+								${criticalScore}
+							</div>
 						</div>
 						<div
 							style="
@@ -906,10 +941,17 @@ async function applyHighlights(groups)  {
     clearHighlights();
     
     const stats = {
-        totalMatches: 0,
-        groups: {},
-        keywords: {}
-    };
+		totalMatches: 0,
+		groups: {},
+		keywords: {},
+	
+		structural: {
+			achievedWeight: 0,
+			totalWeight: 0,
+			matchedCritical: 0,
+			totalCritical: 0
+		}
+	};
     
     const settings =
 		await chrome.storage.local.get([
@@ -929,6 +971,17 @@ async function applyHighlights(groups)  {
 	
 	const wholeWordOnly =
 		settings.wholeWordOnly === true;
+		
+	groups.forEach(group => {
+	
+		stats.structural.totalWeight +=
+			group.weight || 0;
+	
+		if (group.critical) {
+	
+			stats.structural.totalCritical++;
+		}
+	});
 
     groups.forEach(group => {
     	
@@ -961,6 +1014,19 @@ async function applyHighlights(groups)  {
 					searchTerms
 				);
 			});
+			
+		const matched = stats.groups[group.label] > 0;
+		
+		if (matched) {
+		
+			stats.structural.achievedWeight +=
+				group.weight || 0;
+		
+			if (group.critical) {
+		
+				stats.structural.matchedCritical++;
+			}
+		}
     });
 	
 	await renderStatsPanel(
