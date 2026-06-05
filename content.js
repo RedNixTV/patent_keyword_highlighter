@@ -191,7 +191,9 @@ async function renderStatsPanel(
 		panel.style.right = "10px";
 	}
 	
-    panel.style.zIndex = "999999";
+    panel.style.zIndex = "2147483647";
+    panel.style.isolation = "isolate";
+    panel.style.pointerEvents = "auto";
     panel.style.background = "#ffffff";
     panel.style.border = "1px solid #ccc";
     panel.style.borderRadius = "8px";
@@ -507,7 +509,7 @@ async function renderStatsPanel(
         </div>
     `;
 
-    document.body.appendChild(panel);
+    document.documentElement.appendChild(panel);
     
     panel
 		.querySelectorAll(
