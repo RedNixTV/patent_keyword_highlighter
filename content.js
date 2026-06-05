@@ -142,6 +142,32 @@ async function renderStatsPanel(
     const activeKeywordMode =
 		savedSettings.activeKeywordMode ||
 		"single";
+		
+	const activeTabStyle = `
+		flex:1;
+		padding:4px 8px;
+		margin:0;
+		font-size:11px;
+		cursor:pointer;
+		background:#ffffff;
+		border:1px solid #ccc;
+		border-bottom:2px solid #ffffff;
+		border-radius:4px 4px 0 0;
+		font-weight:bold;
+	`;
+	
+	const inactiveTabStyle = `
+		flex:1;
+		padding:4px 8px;
+		margin:0;
+		font-size:11px;
+		cursor:pointer;
+		background:#f3f3f3;
+		border:1px solid #ccc;
+		border-bottom:1px solid #ccc;
+		border-radius:4px 4px 0 0;
+		font-weight:normal;
+	`;
 
     panel.style.position = "fixed";
 	
@@ -407,42 +433,40 @@ async function renderStatsPanel(
 					<div
 							style="
 								display:flex;
-								gap:6px;
+								gap:1px;
 								margin-top:6px;
 							"
 						>
 						
 							<button
 								id="statsSingleModeBtn"
-								style="
-									flex:1;
-									font-weight:
-										${
-											activeKeywordMode === "single"
-												? "bold"
-												: "normal"
-										};
-								"
+								style="${
+									activeKeywordMode === "single"
+										? activeTabStyle
+										: inactiveTabStyle
+								}"
 							>
 								Single Words
 							</button>
 						
 							<button
 								id="statsPhraseModeBtn"
-								style="
-									flex:1;
-									font-weight:
-										${
-											activeKeywordMode === "phrase"
-												? "bold"
-												: "normal"
-										};
-								"
+								style="${
+									activeKeywordMode === "phrase"
+										? activeTabStyle
+										: inactiveTabStyle
+								}"
 							>
 								Phrases
 							</button>
 						
 						</div>
+						<div
+							style="
+								border-bottom:1px solid #ccc;
+								margin-top:-1px;
+							"
+						></div>
 				</div>
             </div>
 
