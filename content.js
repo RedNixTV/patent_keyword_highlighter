@@ -189,36 +189,105 @@ async function renderStatsPanel(
 						label
 					);
 	
-				const keywordRows =
+				const keywords =
 					Object.entries(
 						stats.keywords[label] || {}
 					)
 					.sort(
 						(a, b) =>
 							b[1] - a[1]
-					)
-					.map(
-						([keyword, frequency]) => `
-							<div
-								class="stats-keyword-row"
-								style="
-									display:flex;
-									justify-content:space-between;
-									padding-left:18px;
-									margin-top:4px;
-								"
-							>
-								<span>
-									${keyword}
-								</span>
-	
-								<span>
-									${frequency}
-								</span>
-							</div>
-						`
-					)
-					.join("");
+					);
+					
+				const rows = [];
+				
+				const midpoint =
+					Math.ceil(
+						keywords.length / 2
+					);
+				
+				for (
+					let i = 0;
+					i < midpoint;
+					i++
+				) {
+				
+					rows.push([
+						keywords[i],
+						keywords[i + midpoint]
+					]);
+				
+				}
+    
+				const keywordRows =
+						rows
+							.map(
+								([left, right]) => {
+					
+									const leftHtml =
+											left
+												? `
+													<div
+														style="
+															flex:1;
+															display:flex;
+															justify-content:space-between;
+														"
+													>
+										
+														<span>
+															${left[0]}
+														</span>
+										
+														<span>
+															${left[1]}
+														</span>
+										
+													</div>
+												`
+												: "";
+					
+									const rightHtml =
+											right
+												? `
+													<div
+														style="
+															flex:1;
+															display:flex;
+															justify-content:space-between;
+														"
+													>
+										
+														<span>
+															${right[0]}
+														</span>
+										
+														<span>
+															${right[1]}
+														</span>
+										
+													</div>
+												`
+												: "";
+															
+									return `
+										<div
+											style="
+												display:flex;
+												gap:12px;
+												margin-bottom:4px;
+												padding-left:18px;
+											"
+										>
+					
+											${leftHtml}
+					
+											${rightHtml}
+					
+										</div>
+									`;
+								}
+							)
+							.join("");
 	
 				return `
 					<div>
