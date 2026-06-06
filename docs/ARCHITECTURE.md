@@ -197,9 +197,16 @@ content.js
 
 Responsibilities:
 
-* Highlighting
-* Analytics
-* Page interaction
+* Keyword highlighting
+* Phrase highlighting
+* Analytics generation
+* Structural scoring
+* Critical group scoring
+* Coverage calculation
+* Keyword frequency tracking
+* Scope based analysis
+* Analytics panel rendering
+* Analytics panel persistence
 
 Must not:
 

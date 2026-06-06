@@ -1,4 +1,32 @@
 # Changelog
+## v1.3.0 (2026-06-05)
+
+Phrase Engine, Structural Analytics, and Coverage Metrics
+
+### Added
+
+* Phrase matching mode
+* Single Word and Phrase analytics tabs
+* Structural weighting system
+* Critical group support
+* Keyword coverage analytics
+* Per group coverage percentages
+* Group keyword frequency breakdown
+* Expand / collapse analytics groups
+* Analysis scope persistence
+* Analytics panel mode synchronization
+
+### Improved
+
+* Analytics panel visibility and z-index handling
+* Analytics panel positioning reliability
+* Patent relevance review workflow
+* Profile schema support for phrases, weights, and critical groups
+
+### Refactored
+
+* Profile schema upgraded to v1.3.0
+* Storage migrations extended for phrase and structural analytics support
 
 ## v1.2.0 (2026-06-03)
 

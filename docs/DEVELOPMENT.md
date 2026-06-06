@@ -216,6 +216,25 @@ Verify:
 * Enable All Groups behavior
 * Statistics panel updates
 
+### Phrase Engine
+
+Verify:
+
+* Phrase matching
+* Phrase analytics
+* Phrase coverage calculations
+* Phrase mode switching
+
+### Structural Analytics
+
+Verify:
+
+* Weight calculations
+* Critical group calculations
+* Coverage percentages
+* Keyword frequency breakdowns
+* Analytics expansion behavior
+
 ---
 
 # Debugging
@@ -274,11 +293,11 @@ v1.1.0  Stable v1.1 before phrase engine
 
 v1.2.0  Stable v1.2 before phrase engine
 
-v1.3.0  Stable v1.3 with phrase engine
+v1.3.0 Phrase engine and structural analytics
 
-v1.4.0  Stable v1.4 before statistics dashboard
+v1.4.0 Coverage analytics and keyword frequency tracking
 
-v1.5.0  Stable v1.5 with statistics dashboard
+v1.5.0 Stemming, root word normalization, and advanced coverage metrics
 ```
 
 Example:

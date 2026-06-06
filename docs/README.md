@@ -63,8 +63,35 @@ The extension is designed for:
 * Save workflow
 * Reset workflow
 * Automatic page refresh highlighting
+* Single Word mode
+* Phrase mode
+* Per group coverage tracking
+* Structural weighting
+* Critical group tracking
 
 ## Patent Analytics
+
+Patent Highlighter includes a floating analytics panel that supports both Single Word and Phrase analysis.
+
+Features:
+
+* Keyword coverage metrics
+* Structural scoring
+* Critical group tracking
+* Per group hit counts
+* Per group keyword frequencies
+* Expandable keyword breakdowns
+* Scope based analysis
+* Patent section filtering
+* Draggable and persistent analytics panel
+
+Example:
+
+Portable Projection / Display
+12/14 (86%) | 447 hits
+
+Structural: 24/30
+Critical: 3/4
 
 * Floating analytics panel
 * Per group match counts
