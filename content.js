@@ -139,8 +139,18 @@ async function renderStatsPanel(
 			"statsPanelLeft",
 			"statsPanelTop",
 			"analysisScope",
-			"activeKeywordMode"
+			"activeKeywordMode",
+			"statsPanelWidth",
+			"statsPanelHeight"
 		]);
+		
+	panel.style.width =
+		savedSettings.statsPanelWidth ||
+		"460px";
+	
+	panel.style.height =
+		savedSettings.statsPanelHeight ||
+		"auto";
 
     panel.id =
         "patent-relevance-panel";
@@ -284,10 +294,10 @@ async function renderStatsPanel(
     panel.style.borderRadius = "8px";
     panel.style.boxShadow =
         "0 4px 12px rgba(0,0,0,.15)";
-    panel.style.width = "420px";
+    panel.style.resize = "both";
+	panel.style.overflow = "auto";
     panel.style.fontSize = "13px";
     panel.style.fontFamily = "Arial, sans-serif";
-    panel.style.overflow = "hidden";
     
     const rowsHtml =
 		sortedGroups
@@ -899,14 +909,13 @@ async function renderStatsPanel(
             }
 
             dragging = false;
-
+            
             chrome.storage.local.set({
-                statsPanelLeft:
-                    panel.style.left,
-
-                statsPanelTop:
-                    panel.style.top
-            });
+				statsPanelLeft: panel.style.left,
+				statsPanelTop: panel.style.top,
+				statsPanelWidth: `${panel.offsetWidth}px`,
+				statsPanelHeight: `${panel.offsetHeight}px`
+			});
         }
     );
 }
