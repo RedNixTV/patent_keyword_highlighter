@@ -149,6 +149,75 @@ async function renderStatsPanel(
 		savedSettings.activeKeywordMode ||
 		"single";
 		
+	const totalKeywords =
+		groups.reduce(
+			(sum, group) =>
+				sum +
+				(
+					activeKeywordMode === "phrase"
+						? (group.phrases?.length || 0)
+						: (group.keywords?.length || 0)
+				),
+			0
+		);
+	
+	const matchedKeywords =
+		Object.values(stats.keywords)
+			.reduce(
+				(sum, keywordMap) =>
+					sum +
+					Object.keys(keywordMap).length,
+				0
+			);
+	
+	const vocabularyPct =
+		totalKeywords > 0
+			? (
+				matchedKeywords /
+				totalKeywords
+			) * 100
+			: 0;
+	
+	const structurePct =
+		stats.structural.totalWeight > 0
+			? (
+				stats.structural.achievedWeight /
+				stats.structural.totalWeight
+			) * 100
+			: 0;
+	
+	let relevanceLabel;
+	
+	if (
+		vocabularyPct >= 60 &&
+		structurePct >= 60
+	) {
+	
+		relevanceLabel =
+			"Strong Match";
+	}
+	else if (
+		vocabularyPct >= 60 &&
+		structurePct < 60
+	) {
+	
+		relevanceLabel =
+			"Same Terms, Diff Invention";
+	}
+	else if (
+		vocabularyPct < 60 &&
+		structurePct >= 60
+	) {
+	
+		relevanceLabel =
+			"Different terms, Similar Invention";
+	}
+	else {
+	
+		relevanceLabel =
+			"Weak Match";
+	}
+		
 	const structuralLabel =
 		activeKeywordMode === "phrase"
 			? "Structural"
@@ -443,33 +512,55 @@ async function renderStatsPanel(
 						Patent Profile Match
 					</strong>
 				
-					<select
-						id="statsScopeSelect"
+					<div
 						style="
-							width:160px;
-							font-size:12px;
+							display:flex;
+							justify-content:space-between;
+							align-items:center;
+							gap:12px;
 						"
 					>
-						<option value="all">
-							Entire Patent
-						</option>
-				
-						<option value="biblio">
-							Biblio
-						</option>
-				
-						<option value="claims">
-							Claims
-						</option>
-				
-						<option value="description">
-							Description
-						</option>
-				
-						<option value="claimsDescription">
-							Claims + Description
-						</option>
-					</select>
+					
+						<select
+							id="statsScopeSelect"
+							style="
+								width:160px;
+								font-size:12px;
+							"
+						>
+							<option value="all">
+								Entire Patent
+							</option>
+					
+							<option value="biblio">
+								Biblio
+							</option>
+					
+							<option value="claims">
+								Claims
+							</option>
+					
+							<option value="description">
+								Description
+							</option>
+					
+							<option value="claimsDescription">
+								Claims + Description
+							</option>
+						</select>
+					
+						<div
+							style="
+								font-size:11px;
+								font-weight:bold;
+								white-space:nowrap;
+							"
+						>
+							Relevance:
+							${relevanceLabel}
+						</div>
+					
+					</div>
 					
 					<div
 						style="
