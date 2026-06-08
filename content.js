@@ -140,17 +140,12 @@ async function renderStatsPanel(
 			"statsPanelTop",
 			"analysisScope",
 			"activeKeywordMode",
-			"statsPanelWidth",
-			"statsPanelHeight"
+			"statsPanelWidth"
 		]);
 		
 	panel.style.width =
 		savedSettings.statsPanelWidth ||
 		"460px";
-	
-	panel.style.height =
-		savedSettings.statsPanelHeight ||
-		"auto";
 
     panel.id =
         "patent-relevance-panel";
@@ -914,7 +909,6 @@ async function renderStatsPanel(
 				statsPanelLeft: panel.style.left,
 				statsPanelTop: panel.style.top,
 				statsPanelWidth: `${panel.offsetWidth}px`,
-				statsPanelHeight: `${panel.offsetHeight}px`
 			});
         }
     );
