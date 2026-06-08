@@ -190,37 +190,29 @@ async function renderStatsPanel(
 				stats.structural.totalWeight
 			) * 100
 			: 0;
+			
+	const similarityType =
+		activeKeywordMode === "single"
+			? "Technology Similarity"
+			: "Invention Similarity";
 	
-	let relevanceLabel;
+	let similarityLabel;
 	
-	if (
-		vocabularyPct >= 60 &&
-		structurePct >= 60
-	) {
+	if (structurePct >= 70) {
 	
-		relevanceLabel =
-			"Strong Match";
+		similarityLabel = "High";
 	}
-	else if (
-		vocabularyPct >= 60 &&
-		structurePct < 60
-	) {
+	else if (structurePct >= 40) {
 	
-		relevanceLabel =
-			"Same Terms, Diff Invention";
+		similarityLabel = "Moderate";
 	}
-	else if (
-		vocabularyPct < 60 &&
-		structurePct >= 60
-	) {
+	else if (structurePct >= 20) {
 	
-		relevanceLabel =
-			"Different terms, Similar Invention";
+		similarityLabel = "Low";
 	}
 	else {
 	
-		relevanceLabel =
-			"Weak Match";
+		similarityLabel = "Very Low";
 	}
 		
 	const structuralLabel =
@@ -558,11 +550,12 @@ async function renderStatsPanel(
 							style="
 								font-size:11px;
 								font-weight:bold;
+								text-align:right;
 								white-space:nowrap;
 							"
 						>
-							Relevance:
-							${relevanceLabel}
+							${similarityType}:<br>
+							${similarityLabel}(${Math.round(structurePct)}%)
 						</div>
 					
 					</div>
