@@ -114,7 +114,7 @@ async function renderStatsPanel(
     removeStatsPanel();
     
     const structuralScore =
-		`${stats.structural.achievedWeight} / ${stats.structural.totalWeight}`;
+		`${stats.structural.achievedWeight.toFixed(1)} / ${stats.structural.totalWeight}`;
 	
 	const criticalScore =
 		`${stats.structural.matchedCritical} / ${stats.structural.totalCritical}`;
@@ -1167,21 +1167,39 @@ async function applyHighlights(groups)  {
 					? uniqueMatched / totalKeywords
 					: 0;
 			
-			const requiredCoverage =
-				group.weight >= 4
-					? 0.70
-					: group.weight >= 3
-						? 0.60
-						: 0.50;
-			
 			matched =
-				coverage >= requiredCoverage;
+				coverage > 0.20;
 		}
 		
 		if (matched) {
 		
-			stats.structural.achievedWeight +=
-				group.weight || 0;
+			if (
+				activeKeywordMode === "phrase"
+			) {
+		
+				stats.structural.achievedWeight +=
+					group.weight || 0;
+		
+			}
+			else {
+		
+				const totalKeywords =
+					group.keywords?.length || 0;
+		
+				const uniqueMatched =
+					Object.keys(
+						stats.keywords[group.label]
+					).length;
+		
+				const coverage =
+					totalKeywords > 0
+						? uniqueMatched / totalKeywords
+						: 0;
+		
+				stats.structural.achievedWeight +=
+					(group.weight || 0) *
+					coverage;
+			}
 		
 			if (group.critical) {
 		
