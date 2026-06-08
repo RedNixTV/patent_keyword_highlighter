@@ -234,6 +234,10 @@ Verify:
 * Coverage percentages
 * Keyword frequency breakdowns
 * Analytics expansion behavior
+* Coverage based structural matching
+* Structural scoring stability across patents
+* High hit count / low coverage scenarios
+* Low hit count / high coverage scenarios
 
 ---
 
@@ -295,7 +299,7 @@ v1.2.0  Stable v1.2 before phrase engine
 
 v1.3.0 Phrase engine and structural analytics
 
-v1.4.0 Coverage analytics and keyword frequency tracking
+v1.4.0 Coverage based structural scoring and keyword frequency tracking
 
 v1.5.0 Stemming, root word normalization, and advanced coverage metrics
 ```

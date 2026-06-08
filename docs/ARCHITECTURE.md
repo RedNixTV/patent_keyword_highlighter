@@ -207,6 +207,7 @@ Responsibilities:
 * Scope based analysis
 * Analytics panel rendering
 * Analytics panel persistence
+* Coverage based structural evaluation
 
 Must not:
 
@@ -397,6 +398,8 @@ Responsibilities:
 * Matching
 * Highlight rendering
 * Analytics generation
+* Coverage based group matching
+* Structural qualification logic
 
 Current Status:
 

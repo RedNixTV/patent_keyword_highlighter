@@ -22,6 +22,8 @@ Phrase Engine, Structural Analytics, and Coverage Metrics
 * Analytics panel positioning reliability
 * Patent relevance review workflow
 * Profile schema support for phrases, weights, and critical groups
+* Structural scoring now uses keyword coverage instead of raw hit thresholds
+* Patent relevance evaluation is less sensitive to repeated keyword occurrences
 
 ### Refactored
 

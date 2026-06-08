@@ -84,11 +84,16 @@ Features:
 * Scope based analysis
 * Patent section filtering
 * Draggable and persistent analytics panel
+* Coverage based structural matching
+* Per group concept coverage scoring
 
 Example:
 
 Portable Projection / Display
 12/14 (86%) | 447 hits
+
+Coverage determines structural satisfaction.
+Hit counts are displayed for reference only.
 
 Structural: 24/30
 Critical: 3/4
@@ -105,6 +110,21 @@ Critical: 3/4
 * Patent section filtering
 * Scope based analysis (Entire Patent, Biblio, Claims)
 * Enable All Groups support
+
+### Structural Scoring
+
+Structural scoring is based on keyword coverage rather than raw hit volume.
+
+Example:
+
+Portable Projection / Display
+12/14 (86%) | 447 hits
+
+The coverage value determines whether a group is structurally satisfied.
+
+Repeated occurrences of a small number of keywords do not increase structural scores.
+
+This improves patent relevance analysis by emphasizing concept coverage rather than keyword repetition.
 
 ---
 
