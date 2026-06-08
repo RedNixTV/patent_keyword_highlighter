@@ -15,6 +15,10 @@ Phrase Engine, Structural Analytics, and Coverage Metrics
 * Expand / collapse analytics groups
 * Analysis scope persistence
 * Analytics panel mode synchronization
+* Technology Similarity metric for Single Word mode
+* Invention Similarity metric for Phrase mode
+* Percentage based similarity indicators
+* Proportional structural weighting for Single Word analysis
 
 ### Improved
 
@@ -24,6 +28,16 @@ Phrase Engine, Structural Analytics, and Coverage Metrics
 * Profile schema support for phrases, weights, and critical groups
 * Structural scoring now uses keyword coverage instead of raw hit thresholds
 * Patent relevance evaluation is less sensitive to repeated keyword occurrences
+* Structural scoring now awards partial credit based on keyword coverage
+* Single Word mode better distinguishes weak and strong concept coverage
+* Patent similarity analysis now separates technology overlap from invention overlap
+* Analytics panel provides clearer prior art relevance signals
+
+### Changed
+
+* Replaced fixed structural coverage thresholds with proportional weighting in Single Word mode
+* Phrase mode continues to use full structural weighting
+* Relevance classification replaced by Technology Similarity and Invention Similarity indicators
 
 ### Refactored
 

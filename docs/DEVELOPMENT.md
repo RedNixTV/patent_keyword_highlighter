@@ -232,8 +232,9 @@ Verify:
 * Weight calculations
 * Critical group calculations
 * Coverage percentages
-* Keyword frequency breakdowns
-* Analytics expansion behavior
+* Proportional weighting calculations
+* Technology similarity calculations
+* Invention similarity calculations
 * Coverage based structural matching
 * Structural scoring stability across patents
 * High hit count / low coverage scenarios
@@ -299,7 +300,7 @@ v1.2.0  Stable v1.2 before phrase engine
 
 v1.3.0 Phrase engine and structural analytics
 
-v1.4.0 Coverage based structural scoring and keyword frequency tracking
+v1.4.0 Technology similarity and proportional weighting
 
 v1.5.0 Stemming, root word normalization, and advanced coverage metrics
 ```

@@ -68,6 +68,9 @@ The extension is designed for:
 * Per group coverage tracking
 * Structural weighting
 * Critical group tracking
+* Technology similarity scoring
+* Invention similarity scoring
+* Proportional keyword coverage weighting
 
 ## Patent Analytics
 
@@ -111,20 +114,55 @@ Critical: 3/4
 * Scope based analysis (Entire Patent, Biblio, Claims)
 * Enable All Groups support
 
+### Similarity Analytics
+
+Single Word mode measures Technology Similarity.
+
+Technology Similarity evaluates how much of the technology stack appears within a reference.
+
+Examples:
+
+* projector
+* battery
+* wireless communication
+* cooling
+* optics
+
+Phrase mode measures Invention Similarity.
+
+Invention Similarity evaluates whether the same concepts and relationships appear within the reference.
+
+Examples:
+
+* portable projection system
+* vibration isolation assembly
+* optical protection structure
+
+Technology Similarity and Invention Similarity are displayed independently because a reference may share 
+technology while describing a different invention.
+
 ### Structural Scoring
 
-Structural scoring is based on keyword coverage rather than raw hit volume.
+Single Word mode uses proportional weighting.
 
 Example:
 
 Portable Projection / Display
-12/14 (86%) | 447 hits
+12/14 (86%)
 
-The coverage value determines whether a group is structurally satisfied.
+Weight 5
 
-Repeated occurrences of a small number of keywords do not increase structural scores.
+Contribution:
 
-This improves patent relevance analysis by emphasizing concept coverage rather than keyword repetition.
+4.3 / 5
+
+Partial coverage receives partial structural credit.
+
+Phrase mode continues to use full structural weighting.
+
+A phrase group either satisfies the structural requirement or it does not.
+
+This distinction helps separate technology overlap from invention overlap.
 
 ---
 
