@@ -1154,15 +1154,28 @@ async function applyHighlights(groups)  {
 		}
 		else {
 		
-			const threshold =
-				Math.max(
-					5,
-					(group.weight || 0) * 5
-				);
-		
+			const totalKeywords =
+				group.keywords?.length || 0;
+			
+			const uniqueMatched =
+				Object.keys(
+					stats.keywords[group.label]
+				).length;
+			
+			const coverage =
+				totalKeywords > 0
+					? uniqueMatched / totalKeywords
+					: 0;
+			
+			const requiredCoverage =
+				group.weight >= 4
+					? 0.70
+					: group.weight >= 3
+						? 0.60
+						: 0.50;
+			
 			matched =
-				stats.groups[group.label] >=
-				threshold;
+				coverage >= requiredCoverage;
 		}
 		
 		if (matched) {
